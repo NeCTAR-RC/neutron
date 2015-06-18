@@ -69,6 +69,10 @@ class MetadataProxyHandler(object):
                    default='adminURL',
                    help=_("Network service endpoint type to pull from "
                           "the keystone catalog")),
+        cfg.StrOpt('endpoint_url',
+                   default=None,
+                   help=_("Neutron endpoint URL, if not set will use endpoint "
+                          "from the catalog along with endpoint_type")),
         cfg.StrOpt('nova_metadata_ip', default='127.0.0.1',
                    help=_("IP address used by Nova metadata server.")),
         cfg.IntOpt('nova_metadata_port',
@@ -102,20 +106,24 @@ class MetadataProxyHandler(object):
             self._cache = False
 
     def _get_neutron_client(self):
-        qclient = client.Client(
-            username=self.conf.admin_user,
-            password=self.conf.admin_password,
-            tenant_name=self.conf.admin_tenant_name,
-            auth_url=self.conf.auth_url,
-            auth_strategy=self.conf.auth_strategy,
-            region_name=self.conf.auth_region,
-            token=self.auth_info.get('auth_token'),
-            insecure=self.conf.auth_insecure,
-            ca_cert=self.conf.auth_ca_cert,
-            endpoint_url=self.auth_info.get('endpoint_url'),
-            endpoint_type=self.conf.endpoint_type
-        )
-        return qclient
+        params = {
+            'username': self.conf.admin_user,
+            'password': self.conf.admin_password,
+            'tenant_name': self.conf.admin_tenant_name,
+            'auth_url': self.conf.auth_url,
+            'auth_strategy': self.conf.auth_strategy,
+            'region_name': self.conf.auth_region,
+            'token': self.auth_info.get('auth_token'),
+            'insecure': self.conf.auth_insecure,
+            'ca_cert': self.conf.auth_ca_cert,
+        }
+        if self.conf.endpoint_url:
+            params['endpoint_url'] = self.conf.endpoint_url
+        else:
+            params['endpoint_url'] = self.auth_info.get('endpoint_url')
+            params['endpoint_type'] = self.conf.endpoint_type
+
+        return client.Client(**params)
 
     @webob.dec.wsgify(RequestClass=webob.Request)
     def __call__(self, req):
