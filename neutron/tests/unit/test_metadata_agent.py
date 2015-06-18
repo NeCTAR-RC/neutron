@@ -49,6 +49,7 @@ class FakeConf(object):
     nova_client_cert = 'nova_cert'
     nova_client_priv_key = 'nova_priv_key'
     cache_url = ''
+    endpoint_url = None
 
 
 class FakeConfCache(FakeConf):
