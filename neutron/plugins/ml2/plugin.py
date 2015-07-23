@@ -1465,3 +1465,32 @@ class Ml2Plugin(db_base_plugin_v2.NeutronDbPluginV2,
                 if port:
                     return port.id
         return device
+
+    def get_workers(self):
+        return self.mechanism_manager.get_workers()
+
+    def get_agents_with_access_to_network(self, context, network_id):
+        """Return L2 agents with access to network_id.
+
+        Return None if no L2 agents exist, or a (Possibly empty) list of agents
+        with access to network_id according to their physnet mappings.
+
+        An L2 agent is defined as an agent that has an ML2 mech driver with a
+        matching 'agent_type' that implements check_segment_for_agent.
+        """
+
+        agents = self.get_agents(context)
+        segments = db.get_network_segments(context.session, network_id)
+        result = []
+        found = False
+        for agent in agents:
+            mech_driver = self.mechanism_manager.get_agent_to_mech_driver(
+                agent)
+            if not mech_driver:
+                continue
+            if hasattr(mech_driver, 'check_segment_for_agent'):
+                found = True
+            if any(mech_driver.check_segment_for_agent(s, agent)
+                   for s in segments):
+                result.append(agent)
+        return result if found else None
