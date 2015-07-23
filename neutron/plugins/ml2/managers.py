@@ -691,6 +691,20 @@ class MechanismManager(stevedore.named.NamedExtensionManager):
                 return False
         return True
 
+    def get_workers(self):
+        workers = []
+        for driver in self.ordered_mech_drivers:
+            workers += driver.obj.get_workers()
+        return workers
+
+    def get_agent_to_mech_driver(self, agent):
+        """Return agent's ML2 mech driver."""
+        for driver in self.ordered_mech_drivers:
+            agent_type = getattr(driver.obj, 'agent_type', None)
+            if None != agent_type == agent['agent_type']:
+                return driver.obj
+        return None
+
 
 class ExtensionManager(stevedore.named.NamedExtensionManager):
     """Manage extension drivers using drivers."""
