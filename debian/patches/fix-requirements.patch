@@ -1,0 +1,31 @@
+diff --git a/requirements.txt b/requirements.txt
+index 5780143..8872b03 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,21 +1,21 @@
+ # The order of packages is significant, because pip processes them in the order
+ # of appearance. Changing the order has an impact on the overall integration
+ # process, which may cause wedges in the gate later.
+-pbr!=0.7,<1.0,>=0.6
++pbr==0.10
+ 
+ Paste
+ PasteDeploy>=1.5.0
+-Routes!=2.0,>=1.12.3
+-eventlet!=0.17.0,>=0.16.1
++Routes==2.0
++eventlet==0.16.1
+ greenlet>=0.3.2
+ httplib2>=0.7.5
+-requests!=2.4.0,>=2.2.0
++request==2.4.3
+ jsonrpclib
+ Jinja2>=2.6 # BSD License (3 clause)
+ keystonemiddleware<1.6.0,>=1.5.0
+ netaddr>=0.7.12
+ python-neutronclient<2.5.0,>=2.3.11
+-retrying!=1.3.0,>=1.2.3 # Apache-2.0
++retrying==1.2.3 # Apache-2.0
+ SQLAlchemy<=0.9.99,>=0.9.7
+ WebOb>=1.2.3
+ python-keystoneclient<1.4.0,>=1.2.0
