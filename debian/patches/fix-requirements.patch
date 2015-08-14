@@ -18,7 +18,7 @@ index 5780143..8872b03 100644
  greenlet>=0.3.2
  httplib2>=0.7.5
 -requests!=2.4.0,>=2.2.0
-+request==2.4.3
++requests==2.4.3
  jsonrpclib
  Jinja2>=2.6 # BSD License (3 clause)
  keystonemiddleware<1.6.0,>=1.5.0
