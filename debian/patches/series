@@ -1,3 +1,4 @@
 fix-neutron-configuration.patch
 skip-iptest.patch
 fix-requirements.patch
+fix-manifest.patch

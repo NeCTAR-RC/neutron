@@ -1,0 +1,68 @@
+diff --git a/MANIFEST.in b/MANIFEST.in
+index 4e527c7..2122fe3 100644
+--- a/MANIFEST.in
++++ b/MANIFEST.in
+@@ -2,13 +2,59 @@ include AUTHORS
+ include README.rst
+ include ChangeLog
+ include LICENSE
+-include neutron/db/migration/README
+-include neutron/db/migration/alembic.ini
+-include neutron/db/migration/alembic_migrations/script.py.mako
+-include neutron/db/migration/alembic_migrations/versions/README
++
+ recursive-include neutron/locale *
++recursive-include neutron/db/migration/ *
+ 
+ exclude .gitignore
+ exclude .gitreview
+ 
+ global-exclude *.pyc
++
++include neutron/plugins/bigswitch/requirements.txt
++include neutron/plugins/linuxbridge/README
++include neutron/plugins/vmware/README
++include neutron/plugins/vmware/requirements.txt
++include neutron/plugins/oneconvergence/README
++include neutron/plugins/cisco/README
++include neutron/plugins/cisco/service_plugins/requirements.txt
++include neutron/plugins/metaplugin/README
++include neutron/plugins/ibm/README
++include neutron/plugins/nec/README
++include neutron/plugins/nec/requirements.txt
++include neutron/plugins/midonet/requirements.txt
++include neutron/plugins/openvswitch/README
++include neutron/plugins/openvswitch/agent/xenapi/README
++include neutron/plugins/openvswitch/agent/xenapi/contrib/build-rpm.sh
++include neutron/plugins/openvswitch/agent/xenapi/contrib/rpmbuild/SPECS/openstack-quantum-xen-plugins.spec
++include neutron/plugins/openvswitch/agent/xenapi/etc/xapi.d/plugins/netwrap
++include neutron/plugins/ml2/README
++include neutron/plugins/ml2/drivers/hyperv/README
++include neutron/plugins/ml2/drivers/hyperv/requirements.txt
++include neutron/plugins/ml2/drivers/freescale/README.fslsdn
++include neutron/plugins/ml2/drivers/ovsvapp/requirements.txt
++include neutron/plugins/ml2/drivers/l2pop/README
++include neutron/plugins/ml2/drivers/cisco/requirements.txt
++include neutron/plugins/ml2/drivers/cisco/nexus/requirements.txt
++include neutron/plugins/ml2/drivers/ibm/requirements.txt
++include neutron/plugins/ml2/drivers/mlnx/README
++include neutron/plugins/ml2/drivers/mlnx/requirements.txt
++include neutron/plugins/ml2/drivers/arista/README
++include neutron/plugins/ml2/drivers/arista/requirements.txt
++include neutron/plugins/ml2/drivers/mech_bigswitch/requirements.txt
++include neutron/plugins/ml2/drivers/ofagent/requirements.txt
++include neutron/plugins/ml2/drivers/opendaylight/README
++include neutron/plugins/ml2/drivers/opendaylight/requirements.txt
++include neutron/plugins/ml2/drivers/brocade/requirements.txt
++include neutron/plugins/ml2/drivers/brocade/README.md
++include neutron/plugins/embrane/README
++include neutron/plugins/plumgrid/README
++include neutron/plugins/brocade/README.md
++include neutron/services/l3_router/README
++include neutron/services/l3_router/brocade/requirements.txt
++include neutron/locale/neutron-log-critical.pot
++include neutron/locale/neutron-log-error.pot
++include neutron/locale/neutron-log-info.pot
++include neutron/locale/neutron-log-warning.pot
++include neutron/locale/neutron.pot
++include neutron/debug/README
