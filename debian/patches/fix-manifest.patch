@@ -1,18 +1,16 @@
 diff --git a/MANIFEST.in b/MANIFEST.in
-index 4e527c7..2122fe3 100644
+index 4e527c7..1a12fa4 100644
 --- a/MANIFEST.in
 +++ b/MANIFEST.in
-@@ -2,13 +2,59 @@ include AUTHORS
- include README.rst
- include ChangeLog
- include LICENSE
--include neutron/db/migration/README
--include neutron/db/migration/alembic.ini
--include neutron/db/migration/alembic_migrations/script.py.mako
--include neutron/db/migration/alembic_migrations/versions/README
-+
+@@ -7,8 +7,153 @@ include neutron/db/migration/alembic.ini
+ include neutron/db/migration/alembic_migrations/script.py.mako
+ include neutron/db/migration/alembic_migrations/versions/README
  recursive-include neutron/locale *
-+recursive-include neutron/db/migration/ *
++recursive-include neutron/db/migration/alembic_migrations/versions/ *
++recursive-include neutron/plugins/brocade/tests *
++recursive-include neutron/tests/contrib *
++recursive-include neutron/tests/etc *
++recursive-include neutron/tests/var *
  
  exclude .gitignore
  exclude .gitreview
@@ -44,6 +42,7 @@ index 4e527c7..2122fe3 100644
 +include neutron/plugins/ml2/drivers/l2pop/README
 +include neutron/plugins/ml2/drivers/cisco/requirements.txt
 +include neutron/plugins/ml2/drivers/cisco/nexus/requirements.txt
++include neutron/plugins/ml2/drivers/ibm/mechanism_sdnve.py
 +include neutron/plugins/ml2/drivers/ibm/requirements.txt
 +include neutron/plugins/ml2/drivers/mlnx/README
 +include neutron/plugins/ml2/drivers/mlnx/requirements.txt
@@ -66,3 +65,94 @@ index 4e527c7..2122fe3 100644
 +include neutron/locale/neutron-log-warning.pot
 +include neutron/locale/neutron.pot
 +include neutron/debug/README
++include neutron/tests/functional/requirements.txt
++include neutron/tests/tempest/README.rst
++include neutron/tests/unit/ipam/test_subnet_alloc.py
++
++include neutron/db/migration/alembic_migrations/versions/034883111f_remove_subnetpool_allow_overlap.py
++include neutron/db/migration/alembic_migrations/versions/10cd28e692e9_nuage_extraroute.py
++include neutron/db/migration/alembic_migrations/versions/117643811bca_nec_delete_ofc_mapping.py
++include neutron/db/migration/alembic_migrations/versions/1421183d533f_nsx_dhcp_metadata.py
++include neutron/db/migration/alembic_migrations/versions/14be42f3d0a5_default_sec_group_table.py
++include neutron/db/migration/alembic_migrations/versions/157a5d299379_ml2_binding_profile.py
++include neutron/db/migration/alembic_migrations/versions/1680e1f0c4dc_remove_cisco_nexus_plugin.py
++include neutron/db/migration/alembic_migrations/versions/16a27a58e093_ext_l3_ha_mode.py
++include neutron/db/migration/alembic_migrations/versions/16cdf118d31d_extra_dhcp_options_ipv6_support.py
++include neutron/db/migration/alembic_migrations/versions/19180cf98af6_nsx_gw_devices.py
++include neutron/db/migration/alembic_migrations/versions/1955efc66455_weight_scheduler.py
++include neutron/db/migration/alembic_migrations/versions/1b2580001654_nsx_sec_group_mappin.py
++include neutron/db/migration/alembic_migrations/versions/1b837a7125a9_cisco_apic_driver.py
++include neutron/db/migration/alembic_migrations/versions/1d6ee1ae5da5_db_healing.py
++include neutron/db/migration/alembic_migrations/versions/1e5dd1d09b22_set_not_null_fields_lb_stats.py
++include neutron/db/migration/alembic_migrations/versions/1f71e54a85e7_ml2_net_seg_model.py
++include neutron/db/migration/alembic_migrations/versions/1fcfc149aca4_agents_unique_by_type_and_host.py
++include neutron/db/migration/alembic_migrations/versions/2026156eab2f_l2_dvr_models.py
++include neutron/db/migration/alembic_migrations/versions/20b99fd19d4f_cisco_ucs_manager_mechanism_driver.py
++include neutron/db/migration/alembic_migrations/versions/20c469a5f920_add_index_for_port.py
++include neutron/db/migration/alembic_migrations/versions/236b90af57ab_ml2_refactor_for_dynamic_segments.py
++include neutron/db/migration/alembic_migrations/versions/2447ad0e9585_add_ipv6_mode_props.py
++include neutron/db/migration/alembic_migrations/versions/24c7ea5160d7_cisco_csr_vpnaas.py
++include neutron/db/migration/alembic_migrations/versions/268fb5e99aa2_subnetpool_allocation.py
++include neutron/db/migration/alembic_migrations/versions/26b54cf9024d_add_index_on_allocated.py
++include neutron/db/migration/alembic_migrations/versions/27cc183af192_ml2_vnic_type.py
++include neutron/db/migration/alembic_migrations/versions/28a09af858a8_subnetpool_quotas.py
++include neutron/db/migration/alembic_migrations/versions/28c0ffb8ebbd_remove_mlnx_plugin.py
++include neutron/db/migration/alembic_migrations/versions/2a1ee2fb59e0_add_mac_address_unique_constraint.py
++include neutron/db/migration/alembic_migrations/versions/2b801560a332_remove_hypervneutronplugin_tables.py
++include neutron/db/migration/alembic_migrations/versions/2d2a8a565438_hierarchical_binding.py
++include neutron/db/migration/alembic_migrations/versions/2db5203cb7a9_nuage_floatingip.py
++include neutron/db/migration/alembic_migrations/versions/2eeaf963a447_floatingip_status.py
++include neutron/db/migration/alembic_migrations/versions/31d7f831a591_add_constraint_for_routerid.py
++include neutron/db/migration/alembic_migrations/versions/327ee5fde2c7_set_innodb_engine.py
++include neutron/db/migration/alembic_migrations/versions/32f3915891fd_cisco_apic_driver_update.py
++include neutron/db/migration/alembic_migrations/versions/33c3db036fe4_set_length_of_description_field_metering.py
++include neutron/db/migration/alembic_migrations/versions/33dd0a9fa487_embrane_lbaas_driver.py
++include neutron/db/migration/alembic_migrations/versions/341ee8a4ccb5_sync_with_cisco_repo.py
++include neutron/db/migration/alembic_migrations/versions/35a0f3365720_add_port_security_in_ml2.py
++include neutron/db/migration/alembic_migrations/versions/37f322991f59_nuage_removing_mapping_tables.py
++include neutron/db/migration/alembic_migrations/versions/38495dc99731_ml2_tunnel_endpoints_table.py
++include neutron/db/migration/alembic_migrations/versions/3927f7f7c456_l3_extension_distributed_mode.py
++include neutron/db/migration/alembic_migrations/versions/3b85b693a95f_remove_service_tables.py
++include neutron/db/migration/alembic_migrations/versions/3c346828361e_metering_label_shared.py
++include neutron/db/migration/alembic_migrations/versions/3d2585038b95_vmware_nsx.py
++include neutron/db/migration/alembic_migrations/versions/3d3cb89d84ee_nsx_switch_mappings.py
++include neutron/db/migration/alembic_migrations/versions/408cfbf6923c_remove_ryu_plugin.py
++include neutron/db/migration/alembic_migrations/versions/4119216b7365_add_tenant_id_idx.py
++include neutron/db/migration/alembic_migrations/versions/41662e32bce2_l3_dvr_snat_mapping.py
++include neutron/db/migration/alembic_migrations/versions/43763a9618fd_add_mtu_attributes_to_network.py
++include neutron/db/migration/alembic_migrations/versions/44621190bc02_add_uniqueconstraint_ipavailability_ranges.py
++include neutron/db/migration/alembic_migrations/versions/492a106273f8_brocade_ml2_mech_dri.py
++include neutron/db/migration/alembic_migrations/versions/4ca36cfc898c_nsx_router_mappings.py
++include neutron/db/migration/alembic_migrations/versions/4dbe243cd84d_nsxv.py
++include neutron/db/migration/alembic_migrations/versions/4eba2f05c2f4_correct_vxlan_endpoint_primary_key.py
++include neutron/db/migration/alembic_migrations/versions/4eca4a84f08a_remove_ml2_cisco_cred_db.py
++include neutron/db/migration/alembic_migrations/versions/50d5ba354c23_ml2_binding_vif_details.py
++include neutron/db/migration/alembic_migrations/versions/50e86cb2637a_nsx_mappings.py
++include neutron/db/migration/alembic_migrations/versions/51c54792158e_subnetpools.py
++include neutron/db/migration/alembic_migrations/versions/538732fa21e1_nec_rename_quantum_id_to_neutron_id.py
++include neutron/db/migration/alembic_migrations/versions/544673ac99ab_add_router_port_table.py
++include neutron/db/migration/alembic_migrations/versions/5446f2a45467_set_server_default.py
++include neutron/db/migration/alembic_migrations/versions/54f7549a0e5f_set_not_null_peer_address.py
++include neutron/db/migration/alembic_migrations/versions/5589aa32bf80_l3_dvr_scheduler.py
++include neutron/db/migration/alembic_migrations/versions/57086602ca0a_scrap_nsx_adv_svcs_models.py
++include neutron/db/migration/alembic_migrations/versions/57dd745253a6_nuage_kilo_migrate.py
++include neutron/db/migration/alembic_migrations/versions/589f9237ca0e_cisco_n1kv_ml2_driver_tables.py
++include neutron/db/migration/alembic_migrations/versions/58fe87a01143_cisco_csr_routing.py
++include neutron/db/migration/alembic_migrations/versions/5ac1c354a051_n1kv_segment_alloc.py
++include neutron/db/migration/alembic_migrations/versions/6be312499f9_set_not_null_vlan_id_cisco.py
++include neutron/db/migration/alembic_migrations/versions/81c553f3776c_bsn_consistencyhashes.py
++include neutron/db/migration/alembic_migrations/versions/86d6d9776e2b_cisco_apic_driver_update_l3.py
++include neutron/db/migration/alembic_migrations/versions/884573acbf1c_unify_nsx_router_extra_attributes.py
++include neutron/db/migration/alembic_migrations/versions/aae5706a396_nuage_provider_networks.py
++include neutron/db/migration/alembic_migrations/versions/abc88c33f74f_lb_stats_needs_bigint.py
++include neutron/db/migration/alembic_migrations/versions/b65aa907aec_set_length_of_protocol_field.py
++include neutron/db/migration/alembic_migrations/versions/bebba223288_add_vlan_transparent_property_to_network.py
++include neutron/db/migration/alembic_migrations/versions/d06e871c0d5_set_admin_state_up_not_null_ml2.py
++include neutron/db/migration/alembic_migrations/versions/e197124d4b9_add_unique_constrain.py
++include neutron/db/migration/alembic_migrations/versions/e766b19a3bb_nuage_initial.py
++include neutron/db/migration/alembic_migrations/versions/f15b1fb526dd_cascade_floatingip.py
++include neutron/db/migration/alembic_migrations/versions/havana_initial.py
++include neutron/db/migration/alembic_migrations/versions/HEAD
++include neutron/db/migration/alembic_migrations/versions/icehouse_release.py
++include neutron/db/migration/alembic_migrations/versions/juno_release.py
++include neutron/db/migration/alembic_migrations/versions/kilo_release.py
