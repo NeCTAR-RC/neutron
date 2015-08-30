@@ -1,5 +1,5 @@
 diff --git a/requirements.txt b/requirements.txt
-index 5780143..8872b03 100644
+index c11f7f2..fc16498 100644
 --- a/requirements.txt
 +++ b/requirements.txt
 @@ -1,21 +1,21 @@
@@ -23,7 +23,7 @@ index 5780143..8872b03 100644
  Jinja2>=2.6 # BSD License (3 clause)
  keystonemiddleware<1.6.0,>=1.5.0
  netaddr>=0.7.12
- python-neutronclient<2.5.0,>=2.3.11
+ python-neutronclient<2.5.0,>=2.4.0
 -retrying!=1.3.0,>=1.2.3 # Apache-2.0
 +retrying==1.2.3 # Apache-2.0
  SQLAlchemy<=0.9.99,>=0.9.7
