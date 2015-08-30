@@ -1,6 +1,6 @@
 --- a/etc/neutron.conf
 +++ b/etc/neutron.conf
-@@ -60,7 +60,7 @@ lock_path = $state_path/lock
+@@ -57,7 +57,7 @@
  # previous versions, the class name of a plugin can be specified instead of its
  # entrypoint name.
  #
@@ -9,7 +9,7 @@
  # Example: core_plugin = ml2
  
  # (ListOpt) List of service plugin entrypoints to be loaded from the
-@@ -613,7 +613,7 @@ lock_path = $state_path/lock
+@@ -654,7 +654,7 @@
  # Use "sudo neutron-rootwrap /etc/neutron/rootwrap.conf" to use the real
  # root filter facility.
  # Change to "sudo" to skip the filtering and just run the command directly
@@ -18,7 +18,7 @@
  
  # Set to true to add comments to generated iptables rules that describe
  # each rule's purpose. (System must support the iptables comments module.)
-@@ -650,7 +650,7 @@ admin_password = %SERVICE_PASSWORD%
+@@ -694,7 +694,7 @@
  [database]
  # This line MUST be changed to actually run the plugin.
  # Example:
