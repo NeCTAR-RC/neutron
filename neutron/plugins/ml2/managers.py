@@ -691,17 +691,6 @@ class MechanismManager(stevedore.named.NamedExtensionManager):
                 return False
         return True
 
-    def get_agent_to_mech_driver_mapping(self, agents):
-        """Return a mapping between an agent's type and its ML2 mech driver."""
-
-        result = {}
-        for agent in agents:
-            result[agent['agent_type']] = next((
-                driver.obj for driver in self.ordered_mech_drivers if
-                hasattr(driver.obj, 'agent_type') and
-                driver.obj.agent_type == agent['agent_type']), None)
-        return result
-
 
 class ExtensionManager(stevedore.named.NamedExtensionManager):
     """Manage extension drivers using drivers."""

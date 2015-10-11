@@ -114,24 +114,6 @@ class DhcpFilter(base_resource_filter.BaseResourceFilter):
                        'agent_id': agent_id})
         super(DhcpFilter, self).bind(context, bound_agents, network_id)
 
-    @classmethod
-    def get_hosts_with_network_access(cls, plugin, context, network_id):
-        """Returns hosts with access to network_id's physical_network.
-
-        :return None if the plugin doesn't implement
-        get_agents_with_access_to_network, or a (Possibly empty) list of hosts
-        if it does.
-        """
-
-        if not hasattr(plugin, 'get_agents_with_access_to_network'):
-            return None
-
-        agents = plugin.get_agents_with_access_to_network(context, network_id)
-        if agents is None:
-            return None
-
-        return set(agent['host'] for agent in agents)
-
     def filter_agents(self, plugin, context, network):
         """Return the agents that can host the network."""
         agents_dict = self._get_network_hostable_dhcp_agents(
@@ -185,12 +167,6 @@ class DhcpFilter(base_resource_filter.BaseResourceFilter):
             if agent not in hosted_agents and plugin.is_eligible_agent(
                 context, True, agent)
         ]
-        hosts_with_access = self.get_hosts_with_network_access(
-            plugin, context, network['id'])
-        if hosts_with_access is not None:
-            hostable_dhcp_agents = [
-                agent for agent in hostable_dhcp_agents if agent['host']
-                in hosts_with_access]
 
         if not hostable_dhcp_agents:
             return {'n_agents': 0, 'hostable_agents': []}

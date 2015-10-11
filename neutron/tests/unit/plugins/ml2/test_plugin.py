@@ -48,7 +48,6 @@ from neutron.plugins.ml2.drivers import type_vlan
 from neutron.plugins.ml2 import models
 from neutron.plugins.ml2 import plugin as ml2_plugin
 from neutron.tests import base
-from neutron.tests.common import helpers
 from neutron.tests.unit import _test_extension_portbindings as test_bindings
 from neutron.tests.unit.agent import test_securitygroups_rpc as test_sg_rpc
 from neutron.tests.unit.db import test_allowedaddresspairs_db as test_pair
@@ -1075,107 +1074,6 @@ class TestMl2AllowedAddressPairs(Ml2PluginV2TestCase,
     def setUp(self, plugin=None):
         super(test_pair.TestAllowedAddressPairs, self).setUp(
             plugin=PLUGIN_NAME)
-
-
-class TestMl2AgentsNetworkAccessWithoutL2Agents(Ml2PluginV2TestCase):
-    def test_get_agents_with_access_to_network_no_l2_mech_drivers(self):
-        """Test when ML2 has no agent based mech drivers loaded.
-
-        By default Ml2PluginV2TestCase loads the 'logger' and 'test' mech
-        drivers only.
-        """
-
-        helpers.register_dhcp_agent()
-        helpers.register_l3_agent()
-
-        net = self.driver.create_network(
-            self.context,
-            {'network': {'name': 'net1',
-                         pnet.NETWORK_TYPE: 'vlan',
-                         pnet.PHYSICAL_NETWORK: 'physnet1',
-                         pnet.SEGMENTATION_ID: 1,
-                         'tenant_id': 'tenant_one',
-                         'admin_state_up': True,
-                         'shared': True}})
-        self.assertIsNone(self.driver.get_agents_with_access_to_network(
-            self.context, net['id']))
-
-
-class TestMl2AgentsNetworkAccess(Ml2PluginV2TestCase):
-    _mechanism_drivers = ['openvswitch', 'logger']
-
-    def setUp(self):
-        super(TestMl2AgentsNetworkAccess, self).setUp()
-        helpers.register_ovs_agent(
-            host='host1', bridge_mappings={'physnet1': 'br-eth-1'})
-        helpers.register_ovs_agent(
-            host='host2', bridge_mappings={'physnet2': 'br-eth-2'})
-
-    def test_get_agents_with_access_to_network(self):
-        net = self.driver.create_network(
-            self.context,
-            {'network': {'name': 'net1',
-                         pnet.NETWORK_TYPE: 'vlan',
-                         pnet.PHYSICAL_NETWORK: 'physnet1',
-                         pnet.SEGMENTATION_ID: 1,
-                         'tenant_id': 'tenant_one',
-                         'admin_state_up': True,
-                         'shared': True}})
-        agents = self.driver.get_agents_with_access_to_network(
-            self.context, net['id'])
-
-        self.assertEqual(1, len(agents))
-        self.assertEqual('host1', agents[0]['host'])
-
-    def test_get_agents_with_access_to_network_local(self):
-        net = self.driver.create_network(
-            self.context,
-            {'network': {'name': 'net1',
-                         pnet.NETWORK_TYPE: 'local',
-                         'tenant_id': 'tenant_one',
-                         'admin_state_up': True,
-                         'shared': True}})
-        agents = self.driver.get_agents_with_access_to_network(
-            self.context, net['id'])
-
-        self.assertEqual(2, len(agents))
-
-    def test_get_agents_with_access_to_multi_segment_network(self):
-        helpers.register_ovs_agent(
-            host='host3', bridge_mappings={'physnet3': 'br-eth-3'})
-        net = self.driver.create_network(
-            self.context,
-            {'network': {'name': 'net1',
-                         mpnet.SEGMENTS: [
-                             {pnet.NETWORK_TYPE: 'vlan',
-                              pnet.PHYSICAL_NETWORK: 'physnet1',
-                              pnet.SEGMENTATION_ID: 1},
-                             {pnet.NETWORK_TYPE: 'vlan',
-                              pnet.PHYSICAL_NETWORK: 'physnet2',
-                              pnet.SEGMENTATION_ID: 2}],
-                         'tenant_id': 'tenant_one',
-                         'admin_state_up': True,
-                         'shared': True}})
-        agents = self.driver.get_agents_with_access_to_network(
-            self.context, net['id'])
-
-        hosts = [agent['host'] for agent in agents]
-        self.assertEqual(2, len(hosts))
-        self.assertIn('host1', hosts)
-        self.assertIn('host2', hosts)
-        self.assertNotIn('host3', hosts)
-
-    def test_get_agent_to_mech_driver_mapping(self):
-        helpers.register_dhcp_agent()
-        agents = self.driver.get_agents(self.context)
-        mapping = (
-            self.driver.
-            mechanism_manager.get_agent_to_mech_driver_mapping(agents))
-
-        self.assertIsNone(mapping[constants.AGENT_TYPE_DHCP])
-        self.assertEqual(
-            self.driver.mechanism_manager.mech_drivers['openvswitch'].obj,
-            mapping[constants.AGENT_TYPE_OVS])
 
 
 class DHCPOptsTestCase(test_dhcpopts.TestExtraDhcpOpt):
