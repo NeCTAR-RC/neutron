@@ -66,7 +66,7 @@ agent_opts = [
     # and the Linuxbridge agent to make it easy to back-port. These shared opts
     # should be moved into a common agent config options location as part of
     # the deduplication work.
-    cfg.BoolOpt('prevent_arp_spoofing', default=False,
+    cfg.BoolOpt('prevent_arp_spoofing', default=True,
                 help=_("Enable suppression of ARP responses that don't match "
                        "an IP address that belongs to the port from which "
                        "they originate. Note: This prevents the VMs attached "
