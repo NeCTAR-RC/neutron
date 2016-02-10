@@ -1,0 +1,28 @@
+--- a/etc/neutron.conf
++++ b/etc/neutron.conf
+@@ -57,7 +57,7 @@
+ # previous versions, the class name of a plugin can be specified instead of its
+ # entrypoint name.
+ #
+-# core_plugin =
++core_plugin = ml2
+ # Example: core_plugin = ml2
+ 
+ # (StrOpt) Neutron IPAM (IP address management) driver to be loaded from the
+@@ -683,7 +683,7 @@
+ # Use "sudo neutron-rootwrap /etc/neutron/rootwrap.conf" to use the real
+ # root filter facility.
+ # Change to "sudo" to skip the filtering and just run the command directly
+-# root_helper = sudo
++root_helper = sudo /usr/bin/neutron-rootwrap /etc/neutron/rootwrap.conf
+ 
+ # Set to true to add comments to generated iptables rules that describe
+ # each rule's purpose. (System must support the iptables comments module.)
+@@ -731,6 +731,7 @@
+ # be set in the corresponding core plugin '.ini' file. However, it is suggested
+ # to put the [database] section and its connection attribute in this
+ # configuration file.
++connection = sqlite:////var/lib/neutron/neutron.sqlite
+ 
+ # Database engine for which script will be generated when using offline
+ # migration
