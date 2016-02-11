@@ -384,8 +384,11 @@ class TestLinuxBridgeAgent(base.BaseTestCase):
 
     def test_report_state_revived(self):
         with mock.patch.object(self.agent.state_rpc,
-                               "report_state") as report_st:
-            report_st.return_value = constants.AGENT_REVIVED
+                               'report_state',
+                               return_value=constants.AGENT_REVIVED),\
+             mock.patch.object(linuxbridge_neutron_agent.LinuxBridgeManager,
+                               'get_tap_devices',
+                               return_value=[]):
             self.agent._report_state()
             self.assertTrue(self.agent.fullsync)
 
