@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bad4c104_75ee408d",
+        "filename": "neutron/manager.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000077
+      },
+      "writtenOn": "2016-03-01T03:45:39Z",
+      "side": 1,
+      "message": "this logic seems weird. are you just trying to keep it as close to upstream as possible?",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 61
+      },
+      "revId": "7d0a1a981804e65ec44f8e86f1941c652c0fecb9",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
