@@ -69,8 +69,8 @@ def validate_post_plugin_load():
     message. If all is OK then it will return None.
     """
     if ('dhcp_agents_per_network' in cfg.CONF and
-        cfg.CONF.dhcp_agents_per_network <= 0):
-        msg = _("dhcp_agents_per_network must be >= 1. '%s' "
+        cfg.CONF.dhcp_agents_per_network < 0):
+        msg = _("dhcp_agents_per_network must be >= 0. '%s' "
                 "is invalid.") % cfg.CONF.dhcp_agents_per_network
         return msg
 
