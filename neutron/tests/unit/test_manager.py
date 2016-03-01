@@ -117,8 +117,6 @@ class NeutronManagerTestCase(base.BaseTestCase):
         self.assertIsNone(manager.validate_post_plugin_load())
         cfg.CONF.set_override('dhcp_agents_per_network', 2)
         self.assertIsNone(manager.validate_post_plugin_load())
-        cfg.CONF.set_override('dhcp_agents_per_network', 0)
-        self.assertIsNotNone(manager.validate_post_plugin_load())
         cfg.CONF.set_override('dhcp_agents_per_network', -1)
         self.assertIsNotNone(manager.validate_post_plugin_load())
 
