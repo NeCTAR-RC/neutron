@@ -22,6 +22,30 @@
       "revId": "7d0a1a981804e65ec44f8e86f1941c652c0fecb9",
       "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bad4c104_fbda41e8",
+        "filename": "neutron/manager.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-03-04T03:04:32Z",
+      "side": 1,
+      "message": "Yeah correct",
+      "parentUuid": "bad4c104_75ee408d",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 61
+      },
+      "revId": "7d0a1a981804e65ec44f8e86f1941c652c0fecb9",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
     }
   ]
 }
