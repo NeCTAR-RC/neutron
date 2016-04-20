@@ -1,6 +1,6 @@
 --- a/neutron/tests/unit/agent/linux/test_ipset_manager.py
 +++ b/neutron/tests/unit/agent/linux/test_ipset_manager.py
-@@ -111,6 +111,7 @@
+@@ -118,6 +118,7 @@
          self.verify_mock_calls()
  
      def test_set_members_adding_more_than_5(self):

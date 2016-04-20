@@ -9,7 +9,7 @@
  # Example: core_plugin = ml2
  
  # (ListOpt) List of service plugin entrypoints to be loaded from the
-@@ -654,7 +654,7 @@
+@@ -665,7 +665,7 @@
  # Use "sudo neutron-rootwrap /etc/neutron/rootwrap.conf" to use the real
  # root filter facility.
  # Change to "sudo" to skip the filtering and just run the command directly
@@ -18,7 +18,7 @@
  
  # Set to true to add comments to generated iptables rules that describe
  # each rule's purpose. (System must support the iptables comments module.)
-@@ -694,7 +694,7 @@
+@@ -705,7 +705,7 @@
  [database]
  # This line MUST be changed to actually run the plugin.
  # Example:
