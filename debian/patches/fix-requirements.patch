@@ -1,5 +1,5 @@
 diff --git a/requirements.txt b/requirements.txt
-index 78d5967..ab94456 100644
+index f44b146..ab94456 100644
 --- a/requirements.txt
 +++ b/requirements.txt
 @@ -1,21 +1,21 @@
@@ -11,13 +11,13 @@ index 78d5967..ab94456 100644
  
  Paste
  PasteDeploy>=1.5.0
--Routes!=2.0,>=1.12.3
+-Routes!=2.0,<2.3.0,>=1.12.3
 -eventlet!=0.17.0,>=0.16.1
 +Routes==2.0
 +eventlet==0.16.1
  greenlet>=0.3.2
  httplib2>=0.7.5
--requests!=2.4.0,>=2.2.0
+-requests!=2.4.0,<2.8.0,>=2.2.0
 +requests==2.4.3
  jsonrpclib
  Jinja2>=2.6 # BSD License (3 clause)
