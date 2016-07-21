@@ -1,8 +1,6 @@
-diff --git a/neutron/common/config.py b/neutron/common/config.py
-index b6ba1a7..e99bb07 100644
 --- a/neutron/common/config.py
 +++ b/neutron/common/config.py
-@@ -192,7 +192,6 @@ logging.register_options(cfg.CONF)
+@@ -198,7 +198,6 @@
  
  def init(args, **kwargs):
      cfg.CONF(args=args, project='neutron',
@@ -10,7 +8,7 @@ index b6ba1a7..e99bb07 100644
               **kwargs)
  
      # FIXME(ihrachys): if import is put in global, circular import
-@@ -213,9 +212,6 @@ def setup_logging():
+@@ -219,9 +218,6 @@
      product_name = "neutron"
      logging.setup(cfg.CONF, product_name)
      LOG.info(_LI("Logging enabled!"))

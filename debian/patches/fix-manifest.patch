@@ -1,8 +1,6 @@
-diff --git a/MANIFEST.in b/MANIFEST.in
-index 4e527c7..eaa9172 100644
 --- a/MANIFEST.in
 +++ b/MANIFEST.in
-@@ -7,7 +7,7 @@ include neutron/db/migration/alembic.ini
+@@ -7,7 +7,7 @@
  include neutron/db/migration/alembic_migrations/script.py.mako
  include neutron/db/migration/alembic_migrations/versions/README
  recursive-include neutron/locale *
