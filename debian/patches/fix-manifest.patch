@@ -1,0 +1,17 @@
+diff --git a/MANIFEST.in b/MANIFEST.in
+index 8ac6e4e..6e8429f 100644
+--- a/MANIFEST.in
++++ b/MANIFEST.in
+@@ -5,8 +5,12 @@ include LICENSE
+ include neutron/db/migration/README
+ include neutron/db/migration/alembic.ini
+ include neutron/db/migration/alembic_migrations/script.py.mako
++include neutron/debug/README
++include neutron/services/l3_router/README
+ recursive-include neutron/db/migration/alembic_migrations/versions *
+ recursive-include neutron/locale *
++recursive-include neutron/plugins *
++recursive-include neutron/tests *
+ 
+ exclude .gitignore
+ exclude .gitreview
