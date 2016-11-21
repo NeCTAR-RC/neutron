@@ -98,7 +98,8 @@ class TimeStamp_db_mixin(object):
 
     def extend_resource_dict_timestamp(self, plugin_obj,
                                        resource_res, resource_db):
-        if (resource_db and resource_db.standard_attr.created_at and
+        if (resource_db and resource_db.standard_attr and
+                resource_db.standard_attr.created_at and
                 resource_db.standard_attr.updated_at):
             self._format_timestamp(resource_db, resource_res)
 
