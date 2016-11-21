@@ -38,8 +38,9 @@ resource_model_map = {
 
 
 def _extend_tags_dict(plugin, response_data, db_data):
-    tags = [tag_db.tag for tag_db in db_data.standard_attr.tags]
-    response_data['tags'] = tags
+    if db_data.standard_attr:
+        tags = [tag_db.tag for tag_db in db_data.standard_attr.tags]
+        response_data['tags'] = tags
 
 
 class TagPlugin(common_db_mixin.CommonDbMixin, tag_ext.TagPluginBase):
