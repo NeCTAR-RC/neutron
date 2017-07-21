@@ -175,7 +175,15 @@ class RpcCallbacks(type_tunnel.TunnelRpcCallbackMixin):
                   {'device': device, 'agent_id': agent_id})
         plugin = manager.NeutronManager.get_plugin()
         port_id = plugin._device_to_port_id(rpc_context, device)
+        try:
+            port = ml2_db.get_port(rpc_context.session, port_id)
+        except Exception:
+            port = None
         port_exists = True
+
+        if port and port.port_binding.vif_type == 'midonet':
+            return self.update_device_up(rpc_context, **kwargs)
+
         if (host and not plugin.port_bound_to_host(rpc_context,
                                                    port_id, host)):
             LOG.debug("Device %(device)s not bound to the"
