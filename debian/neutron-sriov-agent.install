@@ -1,0 +1,2 @@
+etc/neutron/plugins/ml2/sriov_agent.ini
+usr/bin/neutron-sriov-nic-agent
