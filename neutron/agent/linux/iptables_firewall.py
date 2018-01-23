@@ -87,6 +87,7 @@ class IptablesFirewallDriver(firewall.FirewallDriver):
             lambda: collections.defaultdict(list))
         self.pre_sg_members = None
         self.enable_ipset = cfg.CONF.SECURITYGROUP.enable_ipset
+        self.enable_ct_zones = cfg.CONF.SECURITYGROUP.enable_ct_zones
         self._enabled_netfilter_for_bridges = False
         self.updated_rule_sg_ids = set()
         self.updated_sg_members = set()
@@ -396,12 +397,14 @@ class IptablesFirewallDriver(firewall.FirewallDriver):
         return rules
 
     def _add_conntrack_jump(self, port):
-        for jump_rule in self._get_jump_rules(port):
-            self._add_raw_rule('PREROUTING', jump_rule)
+        if self.enable_ct_zones:
+            for jump_rule in self._get_jump_rules(port):
+                self._add_raw_rule('PREROUTING', jump_rule)
 
     def _remove_conntrack_jump(self, port):
-        for jump_rule in self._get_jump_rules(port):
-            self._remove_raw_rule('PREROUTING', jump_rule)
+        if self.enable_ct_zones:
+            for jump_rule in self._get_jump_rules(port):
+                self._remove_raw_rule('PREROUTING', jump_rule)
 
     def _add_raw_rule(self, chain, rule, comment=None):
         self.iptables.ipv4['raw'].add_rule(chain, rule, comment=comment)
