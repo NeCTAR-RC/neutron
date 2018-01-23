@@ -388,10 +388,12 @@ class IptablesFirewallDriver(firewall.FirewallDriver):
         return rules
 
     def _add_conntrack_jump(self, port):
+        return
         for jump_rule in self._get_jump_rules(port):
             self._add_raw_rule('PREROUTING', jump_rule)
 
     def _remove_conntrack_jump(self, port):
+        return
         for jump_rule in self._get_jump_rules(port):
             self._remove_raw_rule('PREROUTING', jump_rule)
 
