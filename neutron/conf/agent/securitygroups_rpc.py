@@ -36,7 +36,11 @@ security_group_opts = [
         default=True,
         help=_('Use ipset to speed-up the iptables based security groups. '
                'Enabling ipset support requires that ipset is installed on L2 '
-               'agent node.'))
+               'agent node.')),
+    cfg.BoolOpt(
+        'enable_ct_zones',
+        default=True,
+        help=_('Enable conntrack zones'))
 ]
 
 
