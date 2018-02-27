@@ -4,3 +4,4 @@ set-initial-ha-router-state-in-neutron-keepalived-st.patch
 fix-KeyError-in-OVS-firewall.patch
 bug1823038.patch
 Spawn-metadata-proxy-on-dvr-ha-standby-routers.patch
+fix-manifest.patch
