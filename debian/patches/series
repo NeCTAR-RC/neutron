@@ -1,2 +1,3 @@
 skip-iptest.patch
 flake8-legacy.patch
+fix-manifest.patch
