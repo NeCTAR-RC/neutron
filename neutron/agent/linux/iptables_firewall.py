@@ -88,6 +88,8 @@ class IptablesFirewallDriver(firewall.FirewallDriver):
         self.pre_sg_members = None
         self.enable_ipset = cfg.CONF.SECURITYGROUP.enable_ipset
         self.enable_ct_zones = cfg.CONF.SECURITYGROUP.enable_ct_zones
+        self.bridge_network_mappings = \
+            cfg.CONF.LINUX_BRIDGE.bridge_network_mappings
         self._enabled_netfilter_for_bridges = False
         self.updated_rule_sg_ids = set()
         self.updated_sg_members = set()
@@ -376,6 +378,10 @@ class IptablesFirewallDriver(firewall.FirewallDriver):
                                           comment=ic.INPUT_TO_SG)
 
     def _get_br_device_name(self, port):
+        mappings = self.bridge_network_mappings
+        port_network = port['network_id']
+        if port_network in mappings:
+            return mappings[port_network]
         return ('brq' + port['network_id'])[:n_const.LINUX_DEV_LEN]
 
     def _get_jump_rules(self, port):
