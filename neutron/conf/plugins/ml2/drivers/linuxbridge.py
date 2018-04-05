@@ -74,6 +74,9 @@ bridge_opts = [
     cfg.ListOpt('bridge_mappings',
                 default=DEFAULT_BRIDGE_MAPPINGS,
                 help=_("List of <physical_network>:<physical_bridge>")),
+    cfg.DictOpt('bridge_network_mappings',
+                default={},
+                help=_("List of <physical_network>:<physical_bridge>")),
 ]
 
 qos_options = [
