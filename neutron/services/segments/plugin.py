@@ -248,6 +248,14 @@ class NovaSegmentNotifier(object):
 
     def _notify_subnet_updated(self, resource, event, trigger, context,
                                subnet, original_subnet, **kwargs):
+
+        try:
+            self.p_client.get_inventory(subnet.get('segment_id'),
+                                        IPV4_RESOURCE_CLASS)
+        except n_exc.PlacementResourceProviderNotFound:
+            return self._notify_subnet_created(resource, event, trigger,
+                                               context, subnet, **kwargs)
+
         segment_id = subnet.get('segment_id')
         if not segment_id or subnet['ip_version'] != constants.IP_VERSION_4:
             return
