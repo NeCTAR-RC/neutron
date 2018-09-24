@@ -1,0 +1,2 @@
+etc/metadata_agent.ini etc/neutron
+usr/bin/neutron-metadata-agent usr/bin
