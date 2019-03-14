@@ -27,6 +27,7 @@ from neutron_lib import constants
 from neutron_lib import context
 from oslo_config import cfg
 from oslo_log import log as logging
+import oslo_messaging
 from oslo_service import loopingcall
 from oslo_service import service
 from oslo_utils import excutils
@@ -452,6 +453,8 @@ class CommonAgentLoop(service.Service):
                 LOG.debug("Agent loop found changes! %s", device_info)
                 try:
                     sync = self.process_network_devices(device_info)
+                except oslo_messaging.MessagingException:
+                    LOG.exception("Messaging error in agent loop.")
                 except Exception:
                     LOG.exception("Error in agent loop. Devices info: %s",
                                   device_info)
