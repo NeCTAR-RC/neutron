@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7aa0e0_4030bc35",
+        "filename": "neutron/plugins/ml2/drivers/agent/_common_agent.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1000190
+      },
+      "writtenOn": "2019-03-22T03:40:28Z",
+      "side": 1,
+      "message": "Is it better to print \"device_info\" as well? in order that we could easily know the same device will not raise the exception repeatedly.",
+      "range": {
+        "startLine": 457,
+        "startChar": 34,
+        "endLine": 457,
+        "endChar": 66
+      },
+      "revId": "f9cb89e36e760340241194114cc0e9df5c00fcc2",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": true
+    }
+  ]
+}
