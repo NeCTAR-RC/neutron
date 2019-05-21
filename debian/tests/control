@@ -1,0 +1,3 @@
+Tests: neutron-server neutron-agents
+Depends: python-neutron, python-neutron-fwaas, neutron-server, rabbitmq-server, mysql-server
+Restrictions: needs-root allow-stderr needs-recommends

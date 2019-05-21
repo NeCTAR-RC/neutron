@@ -1,0 +1,34 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "configure" ] ; then
+	update-alternatives --install /usr/bin/neutron-api neutron-api /usr/bin/python2-neutron-api 300
+	update-alternatives --install /usr/bin/neutron-db-manage neutron-db-manage /usr/bin/python2-neutron-db-manage 300
+	update-alternatives --install /usr/bin/neutron-debug neutron-debug /usr/bin/python2-neutron-debug 300
+	update-alternatives --install /usr/bin/neutron-dhcp-agent neutron-dhcp-agent /usr/bin/python2-neutron-dhcp-agent 300
+	update-alternatives --install /usr/bin/neutron-ipset-cleanup neutron-ipset-cleanup /usr/bin/python2-neutron-ipset-cleanup 300
+	update-alternatives --install /usr/bin/neutron-keepalived-state-change neutron-keepalived-state-change /usr/bin/python2-neutron-keepalived-state-change 300
+	update-alternatives --install /usr/bin/neutron-l3-agent neutron-l3-agent /usr/bin/python2-neutron-l3-agent 300
+	update-alternatives --install /usr/bin/neutron-linuxbridge-agent neutron-linuxbridge-agent /usr/bin/python2-neutron-linuxbridge-agent 300
+	update-alternatives --install /usr/bin/neutron-linuxbridge-cleanup neutron-linuxbridge-cleanup /usr/bin/python2-neutron-linuxbridge-cleanup 300
+	update-alternatives --install /usr/bin/neutron-macvtap-agent neutron-macvtap-agent /usr/bin/python2-neutron-macvtap-agent 300
+	update-alternatives --install /usr/bin/neutron-metadata-agent neutron-metadata-agent /usr/bin/python2-neutron-metadata-agent 300
+	update-alternatives --install /usr/bin/neutron-metering-agent neutron-metering-agent /usr/bin/python2-neutron-metering-agent 300
+	update-alternatives --install /usr/bin/neutron-netns-cleanup neutron-netns-cleanup /usr/bin/python2-neutron-netns-cleanup 300
+	update-alternatives --install /usr/bin/neutron-openvswitch-agent neutron-openvswitch-agent /usr/bin/python2-neutron-openvswitch-agent 300
+	update-alternatives --install /usr/bin/neutron-ovs-cleanup neutron-ovs-cleanup /usr/bin/python2-neutron-ovs-cleanup 300
+	update-alternatives --install /usr/bin/neutron-pd-notify neutron-pd-notify /usr/bin/python2-neutron-pd-notify 300
+	update-alternatives --install /usr/bin/neutron-rootwrap neutron-rootwrap /usr/bin/python2-neutron-rootwrap 300
+	update-alternatives --install /usr/bin/neutron-rootwrap-daemon neutron-rootwrap-daemon /usr/bin/python2-neutron-rootwrap-daemon 300
+	update-alternatives --install /usr/bin/neutron-rootwrap-xen-dom0 neutron-rootwrap-xen-dom0 /usr/bin/python2-neutron-rootwrap-xen-dom0 300
+	update-alternatives --install /usr/bin/neutron-rpc-server neutron-rpc-server /usr/bin/python2-neutron-rpc-server 300
+	update-alternatives --install /usr/bin/neutron-sanity-check neutron-sanity-check /usr/bin/python2-neutron-sanity-check 300
+	update-alternatives --install /usr/bin/neutron-server neutron-server /usr/bin/python2-neutron-server 300
+	update-alternatives --install /usr/bin/neutron-sriov-nic-agent neutron-sriov-nic-agent /usr/bin/python2-neutron-sriov-nic-agent 300
+	update-alternatives --install /usr/bin/neutron-usage-audit neutron-usage-audit /usr/bin/python2-neutron-usage-audit 300
+fi
+
+#DEBHELPER#
+
+exit 0

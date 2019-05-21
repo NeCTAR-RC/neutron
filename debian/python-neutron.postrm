@@ -1,0 +1,34 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "remove" ] || [ "$1" = "disappear" ] ; then
+	update-alternatives --remove neutron-api /usr/bin/python2-neutron-api
+	update-alternatives --remove neutron-db-manage /usr/bin/python2-neutron-db-manage
+	update-alternatives --remove neutron-debug /usr/bin/python2-neutron-debug
+	update-alternatives --remove neutron-dhcp-agent /usr/bin/python2-neutron-dhcp-agent
+	update-alternatives --remove neutron-ipset-cleanup /usr/bin/python2-neutron-ipset-cleanup
+	update-alternatives --remove neutron-keepalived-state-change /usr/bin/python2-neutron-keepalived-state-change
+	update-alternatives --remove neutron-l3-agent /usr/bin/python2-neutron-l3-agent
+	update-alternatives --remove neutron-linuxbridge-agent /usr/bin/python2-neutron-linuxbridge-agent
+	update-alternatives --remove neutron-linuxbridge-cleanup /usr/bin/python2-neutron-linuxbridge-cleanup
+	update-alternatives --remove neutron-macvtap-agent /usr/bin/python2-neutron-macvtap-agent
+	update-alternatives --remove neutron-metadata-agent /usr/bin/python2-neutron-metadata-agent
+	update-alternatives --remove neutron-metering-agent /usr/bin/python2-neutron-metering-agent
+	update-alternatives --remove neutron-netns-cleanup /usr/bin/python2-neutron-netns-cleanup
+	update-alternatives --remove neutron-openvswitch-agent /usr/bin/python2-neutron-openvswitch-agent
+	update-alternatives --remove neutron-ovs-cleanup /usr/bin/python2-neutron-ovs-cleanup
+	update-alternatives --remove neutron-pd-notify /usr/bin/python2-neutron-pd-notify
+	update-alternatives --remove neutron-rootwrap /usr/bin/python2-neutron-rootwrap
+	update-alternatives --remove neutron-rootwrap-daemon /usr/bin/python2-neutron-rootwrap-daemon
+	update-alternatives --remove neutron-rootwrap-xen-dom0 /usr/bin/python2-neutron-rootwrap-xen-dom0
+	update-alternatives --remove neutron-rpc-server /usr/bin/python2-neutron-rpc-server
+	update-alternatives --remove neutron-sanity-check /usr/bin/python2-neutron-sanity-check
+	update-alternatives --remove neutron-server /usr/bin/python2-neutron-server
+	update-alternatives --remove neutron-sriov-nic-agent /usr/bin/python2-neutron-sriov-nic-agent
+	update-alternatives --remove neutron-usage-audit /usr/bin/python2-neutron-usage-audit
+fi
+
+#DEBHELPER#
+
+exit 0

@@ -1,0 +1,589 @@
+Source: neutron
+Section: net
+Priority: optional
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+XSBC-Original-Maintainer: Chuck Short <zulcss@ubuntu.com>
+Build-Depends:
+ debhelper (>= 10~),
+ dh-python,
+ openstack-pkg-tools (>= 23~),
+ python-all,
+ python-pbr (>= 2.0.0),
+ python-setuptools,
+ python3-all,
+ python3-pbr (>= 2.0.0),
+ python3-setuptools,
+Build-Depends-Indep:
+ crudini,
+ python-alembic (>= 0.8.10),
+ python-coverage (>= 4.0),
+ python-ddt (>= 1.0.1),
+ python-debtcollector (>= 1.2.0),
+ python-designateclient (>= 2.7.0),
+ python-eventlet (>= 0.18.2),
+ python-fixtures (>= 3.0.0),
+ python-hacking (>= 0.12.0),
+ python-httplib2 (>= 0.9.1),
+ python-jinja2 (>= 2.10),
+ python-keystoneauth1 (>= 3.4.0),
+ python-keystonemiddleware (>= 4.17.0),
+ python-mock (>= 2.0.0),
+ python-netaddr (>= 0.7.18),
+ python-netifaces (>= 0.10.4),
+ python-neutron-lib (>= 1.18.0),
+ python-neutronclient (>= 1:6.7.0),
+ python-novaclient (>= 2:9.1.0),
+ python-openstackdocstheme (>= 1.18.1),
+ python-openvswitch (>= 2.8.0),
+ python-os-testr (>= 1.0.0),
+ python-os-xenapi (>= 0.3.1),
+ python-oslo.cache (>= 1.26.0),
+ python-oslo.concurrency (>= 3.25.0),
+ python-oslo.config (>= 1:5.1.0),
+ python-oslo.context (>= 1:2.19.2),
+ python-oslo.db (>= 4.27.0),
+ python-oslo.i18n (>= 3.15.3),
+ python-oslo.log (>= 3.36.0),
+ python-oslo.messaging (>= 5.29.0),
+ python-oslo.middleware (>= 3.31.0),
+ python-oslo.policy (>= 1.30.0),
+ python-oslo.privsep (>= 1.23.0),
+ python-oslo.reports (>= 1.18.0),
+ python-oslo.rootwrap (>= 5.8.0),
+ python-oslo.serialization (>= 2.18.0),
+ python-oslo.service (>= 1.24.0),
+ python-oslo.utils (>= 3.33.0),
+ python-oslo.versionedobjects (>= 1.31.2),
+ python-oslotest (>= 1:3.2.0),
+ python-osprofiler (>= 1.4.0),
+ python-ovsdbapp (>= 0.9.1),
+ python-paste (>= 2.0.2),
+ python-pastedeploy (>= 1.5.0),
+ python-pecan (>= 1.3.2),
+ python-pep8,
+ python-psutil (>= 3.2.2),
+ python-pymysql (>= 0.7.6),
+ python-pyroute2 (>= 0.4.21),
+ python-requests (>= 2.14.2),
+ python-routes (>= 2.3.1),
+ python-ryu (>= 4.24),
+ python-six (>= 1.10.0),
+ python-sqlalchemy (>= 1.2.0),
+ python-stestr (>= 1.0.0),
+ python-stevedore (>= 1:1.20.0),
+ python-subunit (>= 1.0.0),
+ python-tempest (>= 1:16.1.0),
+ python-tenacity (>= 3.2.1),
+ python-testrepository (>= 0.0.18),
+ python-testresources (>= 2.0.0),
+ python-testscenarios (>= 0.4),
+ python-testtools (>= 2.2.0),
+ python-weakrefmethod (>= 1.0.2),
+ python-webob (>= 1:1.7.1),
+ python-webtest (>= 2.0.27),
+ python3-alembic (>= 0.8.10),
+ python3-coverage (>= 4.0),
+ python3-ddt (>= 1.0.1),
+ python3-debtcollector (>= 1.2.0),
+ python3-designateclient (>= 2.7.0),
+ python3-eventlet (>= 0.18.2),
+ python3-fixtures (>= 3.0.0),
+ python3-hacking (>= 0.12.0),
+ python3-httplib2 (>= 0.9.1),
+ python3-jinja2 (>= 2.10),
+ python3-keystoneauth1 (>= 3.4.0),
+ python3-keystonemiddleware (>= 4.17.0),
+ python3-mock (>= 2.0.0),
+ python3-netaddr (>= 0.7.18),
+ python3-netifaces (>= 0.10.4),
+ python3-neutron-lib (>= 1.18.0),
+ python3-neutronclient (>= 1:6.7.0),
+ python3-novaclient (>= 2:9.1.0),
+ python3-openstackdocstheme (>= 1.18.1),
+ python3-openvswitch (>= 2.8.0),
+ python3-os-testr (>= 1.0.0),
+ python3-os-xenapi (>= 0.3.1),
+ python3-oslo.cache (>= 1.26.0),
+ python3-oslo.concurrency (>= 3.25.0),
+ python3-oslo.config (>= 1:5.1.0),
+ python3-oslo.context (>= 1:2.19.2),
+ python3-oslo.db (>= 4.27.0),
+ python3-oslo.i18n (>= 3.15.3),
+ python3-oslo.log (>= 3.36.0),
+ python3-oslo.messaging (>= 5.29.0),
+ python3-oslo.middleware (>= 3.31.0),
+ python3-oslo.policy (>= 1.30.0),
+ python3-oslo.privsep (>= 1.23.0),
+ python3-oslo.reports (>= 1.18.0),
+ python3-oslo.rootwrap (>= 5.8.0),
+ python3-oslo.serialization (>= 2.18.0),
+ python3-oslo.service (>= 1.24.0),
+ python3-oslo.utils (>= 3.33.0),
+ python3-oslo.versionedobjects (>= 1.31.2),
+ python3-oslotest (>= 1:3.2.0),
+ python3-osprofiler (>= 1.4.0),
+ python3-ovsdbapp (>= 0.9.1),
+ python3-paste (>= 2.0.2),
+ python3-pastedeploy (>= 1.5.0),
+ python3-pecan (>= 1.3.2),
+ python3-pep8,
+ python3-psutil (>= 3.2.2),
+ python3-pymysql (>= 0.7.6),
+ python3-pyroute2 (>= 0.4.21),
+ python3-requests (>= 2.14.2),
+ python3-routes (>= 2.3.1),
+ python3-ryu (>= 4.24),
+ python3-six (>= 1.10.0),
+ python3-sphinx (>= 1.6.2),
+ python3-sqlalchemy (>= 1.2.0),
+ python3-stestr (>= 1.0.0),
+ python3-stevedore (>= 1:1.20.0),
+ python3-subunit (>= 1.0.0),
+ python3-tempest (>= 1:16.1.0),
+ python3-tenacity (>= 3.2.1),
+ python3-testrepository (>= 0.0.18),
+ python3-testresources (>= 2.0.0),
+ python3-testscenarios (>= 0.4),
+ python3-testtools (>= 2.2.0),
+ python3-webob (>= 1:1.7.1),
+ python3-webtest (>= 2.0.27),
+ rename,
+Standards-Version: 4.1.4
+Vcs-Browser: https://git.launchpad.net/~ubuntu-server-dev/ubuntu/+source/neutron
+Vcs-Git: https://git.launchpad.net/~ubuntu-server-dev/ubuntu/+source/neutron
+Homepage: https://docs.openstack.org/neutron
+
+Package: neutron-dhcp-agent
+Architecture: all
+Depends:
+ dnsmasq-base (>= 2.76),
+ dnsmasq-utils (>= 2.76),
+ neutron-metadata-agent (= ${source:Version}),
+ python-neutron (= ${source:Version}) | python3-neutron (= ${source:Version}),
+ ${misc:Depends},
+ ${python:Depends},
+ ${shlibs:Depends},
+Description: Neutron is a virtual network service for Openstack - DHCP agent
+ Neutron is a virtual network service for Openstack, and a part of
+ Netstack. Just like OpenStack Nova provides an API to dynamically
+ request and configure virtual servers, Neutron provides an API to
+ dynamically request and configure virtual networks. These networks
+ connect "interfaces" from other OpenStack services (e.g., virtual NICs
+ from Nova VMs). The Neutron API supports extensions to provide
+ advanced network capabilities (e.g., QoS, ACLs, network monitoring,
+ etc.)
+ .
+ This package provides the DHCP agent.
+
+Package: neutron-l3-agent
+Architecture: all
+Depends:
+ conntrack,
+ iputils-arping,
+ keepalived,
+ neutron-metadata-agent (= ${source:Version}),
+ python-neutron (= ${source:Version}) | python3-neutron (= ${source:Version}),
+ python-neutron-fwaas (>= 1:13.0.0~) | python3-neutron-fwaas (>= 1:13.0.0~),
+ radvd,
+ ${misc:Depends},
+ ${python:Depends},
+ ${shlibs:Depends},
+Description: Neutron is a virtual network service for Openstack - l3 agent
+ Neutron is a virtual network service for Openstack, and a part of
+ Netstack. Just like OpenStack Nova provides an API to dynamically
+ request and configure virtual servers, Neutron provides an API to
+ dynamically request and configure virtual networks. These networks
+ connect "interfaces" from other OpenStack services (e.g., virtual NICs
+ from Nova VMs). The Neutron API supports extensions to provide
+ advanced network capabilities (e.g., QoS, ACLs, network monitoring,
+ etc.)
+ .
+ This package provides the layer 3 routing agent.
+
+Package: neutron-linuxbridge-agent
+Architecture: all
+Depends:
+ bridge-utils,
+ conntrack,
+ ebtables,
+ python-neutron (= ${source:Version}) | python3-neutron (= ${source:Version}),
+ ${misc:Depends},
+ ${python:Depends},
+ ${shlibs:Depends},
+Breaks:
+ neutron-plugin-linuxbirdge-agent ( << 2:8.0.0~b2-0ubuntu5~ ),
+ neutron-plugin-ml2 ( << 2:8.0.0~b2-0ubuntu5~ ),
+Replaces:
+ neutron-plugin-linuxbridge-agent ( << 2:8.0.0~b2-0ubuntu5~ ),
+ neutron-plugin-ml2 ( << 2:8.0.0~b2-0ubuntu5~ ),
+Description: Neutron is a virtual network service for Openstack - linuxbridge agent
+ Neutron is a virtual network service for Openstack, and a part of
+ Netstack. Just like OpenStack Nova provides an API to dynamically
+ request and configure virtual servers, Neutron provides an API to
+ dynamically request and configure virtual networks. These networks
+ connect "interfaces" from other OpenStack services (e.g., virtual NICs
+ from Nova VMs). The Neutron API supports extensions to provide
+ advanced network capabilities (e.g., QoS, ACLs, network monitoring,
+ etc.)
+ .
+ This package provides the linuxbridge plugin agent.
+
+Package: neutron-macvtap-agent
+Architecture: all
+Depends:
+ python-neutron (= ${source:Version}) | python3-neutron (= ${source:Version}),
+ ${misc:Depends},
+ ${python:Depends},
+ ${shlibs:Depends},
+Description: Neutron is a virtual network service for Openstack - Macvtap L2 Agent
+ Neutron is a virtual network service for Openstack, and a part of
+ Netstack. Just like OpenStack Nova provides an API to dynamically
+ request and configure virtual servers, Neutron provides an API to
+ dynamically request and configure virtual networks. These networks
+ connect "interfaces" from other OpenStack services (e.g., virtual NICs
+ from Nova VMs). The Neutron API supports extensions to provide
+ advanced network capabilities (e.g., QoS, ACLs, network monitoring,
+ etc.)
+ .
+ This package provides the Macvtap L2 Agent.
+
+Package: neutron-metadata-agent
+Architecture: all
+Depends:
+ haproxy,
+ python-neutron (= ${source:Version}) | python3-neutron (= ${source:Version}),
+ ${misc:Depends},
+ ${python:Depends},
+ ${shlibs:Depends},
+Description: Neutron is a virtual network service for Openstack - metadata agent
+ Neutron is a virtual network service for Openstack, and a part of
+ Netstack. Just like OpenStack Nova provides an API to dynamically
+ request and configure virtual servers, Neutron provides an API to
+ dynamically request and configure virtual networks. These networks
+ connect "interfaces" from other OpenStack services (e.g., virtual NICs
+ from Nova VMs). The Neutron API supports extensions to provide
+ advanced network capabilities (e.g., QoS, ACLs, network monitoring,
+ etc.)
+ .
+ This package provides the metadata proxy agent.
+
+Package: neutron-metering-agent
+Architecture: all
+Depends:
+ python-neutron (= ${source:Version}) | python3-neutron (= ${source:Version}),
+ ${misc:Depends},
+ ${python:Depends},
+ ${shlibs:Depends},
+Breaks:
+ neutron-plugin-metering-agent ( << 1:2014.1~b3-0ubuntu2~ ),
+Replaces:
+ neutron-plugin-metering-agent ( << 1:2014.1~b3-0ubuntu2~ ),
+Description: Neutron is a virtual network service for Openstack - metering agent
+ Neutron is a virtual network service for Openstack, and a part of
+ Netstack. Just like OpenStack Nova provides an API to dynamically
+ request and configure virtual servers, Neutron provides an API to
+ dynamically request and configure virtual networks. These networks
+ connect "interfaces" from other OpenStack services (e.g., virtual NICs
+ from Nova VMs). The Neutron API supports extensions to provide
+ advanced network capabilities (e.g., QoS, ACLs, network monitoring,
+ etc.)
+ .
+ This package provides the metering agent.
+
+Package: neutron-openvswitch-agent
+Architecture: all
+Depends:
+ conntrack,
+ openvswitch-switch,
+ python-neutron (= ${source:Version}) | python3-neutron (= ${source:Version}),
+ ${misc:Depends},
+ ${python:Depends},
+ ${shlibs:Depends},
+Breaks:
+ neutron-plugin-ml2 ( << 2:8.0.0~b2-0ubuntu5~ ),
+ neutron-plugin-openvswitch-agent ( << 2:8.0.0~b2-0ubuntu1~ ),
+Replaces:
+ neutron-plugin-ml2 ( << 2:8.0.0~b2-0ubuntu5~ ),
+ neutron-plugin-openvswitch-agent ( << 2:8.0.0~b2-0ubuntu1~ ),
+Description: Neutron is a virtual network service for Openstack - Open vSwitch plugin agent
+ Neutron is a virtual network service for Openstack, and a part of
+ Netstack. Just like OpenStack Nova provides an API to dynamically
+ request and configure virtual servers, Neutron provides an API to
+ dynamically request and configure virtual networks. These networks
+ connect "interfaces" from other OpenStack services (e.g., virtual NICs
+ from Nova VMs). The Neutron API supports extensions to provide
+ advanced network capabilities (e.g., QoS, ACLs, network monitoring,
+ etc.)
+ .
+ This package provides the Open vSwitch plugin agent.
+
+Package: neutron-plugin-ml2
+Architecture: all
+Provides:
+ neutron-plugin,
+Depends:
+ python-neutron (= ${source:Version}) | python3-neutron (= ${source:Version}),
+ ${misc:Depends},
+ ${python:Depends},
+ ${shlibs:Depends},
+Description: Neutron is a virtual network service for Openstack - ML2 plugin
+ Neutron is a virtual network service for Openstack, and a part of
+ Netstack. Just like OpenStack Nova provides an API to dynamically
+ request and configure virtual servers, Neutron provides an API to
+ dynamically request and configure virtual networks. These networks
+ connect "interfaces" from other OpenStack services (e.g., virtual NICs
+ from Nova VMs). The Neutron API supports extensions to provide
+ advanced network capabilities (e.g., QoS, ACLs, network monitoring,
+ etc.)
+ .
+ This package provides the Modular Layer 2 plugin.
+
+Package: neutron-server
+Architecture: all
+Depends:
+ adduser,
+ python-neutron (= ${source:Version}) | python3-neutron (= ${source:Version}),
+ ${misc:Depends},
+ ${python:Depends},
+ ${shlibs:Depends},
+Recommends:
+ neutron-plugin-ml2,
+Description: Neutron is a virtual network service for Openstack - server
+ Neutron is a virtual network service for Openstack, and a part of
+ Netstack. Just like OpenStack Nova provides an API to dynamically
+ request and configure virtual servers, Neutron provides an API to
+ dynamically request and configure virtual networks. These networks
+ connect "interfaces" from other OpenStack services (e.g., virtual NICs
+ from Nova VMs). The Neutron API supports extensions to provide
+ advanced network capabilities (e.g., QoS, ACLs, network monitoring,
+ etc.)
+ .
+ This package provides the Neutron server
+
+Package: neutron-sriov-agent
+Architecture: all
+Depends:
+ python-neutron (= ${source:Version}) | python3-neutron (= ${source:Version}),
+ ${misc:Depends},
+ ${python:Depends},
+ ${shlibs:Depends},
+Breaks:
+ neutron-plugin-ml2 ( << 2:8.0.0~b2-0ubuntu5~ ),
+Replaces:
+ neutron-plugin-ml2 ( << 2:8.0.0~b2-0ubuntu5~ ),
+Description: Neutron is a virtual network service for Openstack - SR-IOV agent
+ Neutron is a virtual network service for Openstack, and a part of
+ Netstack. Just like OpenStack Nova provides an API to dynamically
+ request and configure virtual servers, Neutron provides an API to
+ dynamically request and configure virtual networks. These networks
+ connect "interfaces" from other OpenStack services (e.g., virtual NICs
+ from Nova VMs). The Neutron API supports extensions to provide
+ advanced network capabilities (e.g., QoS, ACLs, network monitoring,
+ etc.)
+ .
+ This package provides the Mellanox SR-IOV agent.
+
+Package: python-neutron
+Architecture: all
+Section: python
+Depends:
+ iproute2,
+ neutron-common (= ${source:Version}),
+ python-alembic (>= 0.8.10),
+ python-debtcollector (>= 1.2.0),
+ python-designateclient (>= 2.7.0),
+ python-eventlet (>= 0.18.2),
+ python-httplib2 (>= 0.9.1),
+ python-jinja2 (>= 2.10),
+ python-keystoneauth1 (>= 3.4.0),
+ python-keystonemiddleware (>= 4.17.0),
+ python-netaddr (>= 0.7.18),
+ python-netifaces (>= 0.10.4),
+ python-neutron-lib (>= 1.18.0),
+ python-neutronclient (>= 1:6.7.0),
+ python-novaclient (>= 2:9.1.0),
+ python-openvswitch (>= 2.8.0),
+ python-os-xenapi (>= 0.3.1),
+ python-oslo.cache (>= 1.26.0),
+ python-oslo.concurrency (>= 3.25.0),
+ python-oslo.config (>= 1:5.1.0),
+ python-oslo.context (>= 1:2.19.2),
+ python-oslo.db (>= 4.27.0),
+ python-oslo.i18n (>= 3.15.3),
+ python-oslo.log (>= 3.36.0),
+ python-oslo.messaging (>= 5.29.0),
+ python-oslo.middleware (>= 3.31.0),
+ python-oslo.policy (>= 1.30.0),
+ python-oslo.privsep (>= 1.23.0),
+ python-oslo.reports (>= 1.18.0),
+ python-oslo.rootwrap (>= 5.8.0),
+ python-oslo.serialization (>= 2.18.0),
+ python-oslo.service (>= 1.24.0),
+ python-oslo.utils (>= 3.33.0),
+ python-oslo.versionedobjects (>= 1.31.2),
+ python-osprofiler (>= 1.4.0),
+ python-ovsdbapp (>= 0.9.1),
+ python-paste (>= 2.0.2),
+ python-pastedeploy (>= 1.5.0),
+ python-pbr (>= 2.0.0),
+ python-pecan (>= 1.3.2),
+ python-psutil (>= 3.2.2),
+ python-pymysql,
+ python-pyroute2 (>= 0.4.21),
+ python-requests (>= 2.14.2),
+ python-routes (>= 2.3.1),
+ python-ryu (>= 4.24),
+ python-six (>= 1.10.0),
+ python-sqlalchemy (>= 1.2.0),
+ python-stevedore (>= 1:1.20.0),
+ python-tenacity (>= 3.2.1),
+ python-weakrefmethod (>= 1.0.2),
+ python-webob (>= 1:1.7.1),
+ ${misc:Depends},
+ ${python:Depends},
+Provides:
+ ${python:Provides},
+Breaks:
+ neutron-dhcp-agent (<= 1:13.0.0~b2-0ubuntu2~),
+ neutron-l3-agent (<= 1:13.0.0~b2-0ubuntu2~),
+ neutron-linuxbridge-agent (<= 1:13.0.0~b2-0ubuntu2~),
+ neutron-macvtap-agent (<= 1:13.0.0~b2-0ubuntu2~),
+ neutron-metadata-agent (<= 1:13.0.0~b2-0ubuntu2~),
+ neutron-metering-agent (<= 1:13.0.0~b2-0ubuntu2~),
+ neutron-openvswitch-agent (<= 1:13.0.0~b2-0ubuntu2~),
+ neutron-server (<= 1:13.0.0~b2-0ubuntu2~),
+ neutron-sriov-agent (<= 1:13.0.0~b2-0ubuntu2~),
+Replaces:
+ neutron-dhcp-agent (<= 1:13.0.0~b2-0ubuntu2~),
+ neutron-l3-agent (<= 1:13.0.0~b2-0ubuntu2~),
+ neutron-linuxbridge-agent (<= 1:13.0.0~b2-0ubuntu2~),
+ neutron-macvtap-agent (<= 1:13.0.0~b2-0ubuntu2~),
+ neutron-metadata-agent (<= 1:13.0.0~b2-0ubuntu2~),
+ neutron-metering-agent (<= 1:13.0.0~b2-0ubuntu2~),
+ neutron-openvswitch-agent (<= 1:13.0.0~b2-0ubuntu2~),
+ neutron-server (<= 1:13.0.0~b2-0ubuntu2~),
+ neutron-sriov-agent (<= 1:13.0.0~b2-0ubuntu2~),
+Description: Neutron is a virtual network service for Openstack - Python library
+ Neutron is a virtual network service for Openstack, and a part of
+ Netstack. Just like OpenStack Nova provides an API to dynamically
+ request and configure virtual servers, Neutron provides an API to
+ dynamically request and configure virtual networks. These networks
+ connect "interfaces" from other OpenStack services (e.g., virtual NICs
+ from Nova VMs). The Neutron API supports extensions to provide
+ advanced network capabilities (e.g., QoS, ACLs, network monitoring,
+ etc.)
+ .
+ This package provides the Python 2.x library.
+
+Package: python3-neutron
+Architecture: all
+Section: python
+Depends:
+ iproute2,
+ neutron-common (= ${source:Version}),
+ python3-alembic (>= 0.8.10),
+ python3-debtcollector (>= 1.2.0),
+ python3-designateclient (>= 2.7.0),
+ python3-eventlet (>= 0.18.2),
+ python3-httplib2 (>= 0.9.1),
+ python3-jinja2 (>= 2.10),
+ python3-keystoneauth1 (>= 3.4.0),
+ python3-keystonemiddleware (>= 4.17.0),
+ python3-netaddr (>= 0.7.18),
+ python3-netifaces (>= 0.10.4),
+ python3-neutron-lib (>= 1.18.0),
+ python3-neutronclient (>= 1:6.7.0),
+ python3-novaclient (>= 2:9.1.0),
+ python3-openvswitch (>= 2.8.0),
+ python3-os-xenapi (>= 0.3.1),
+ python3-oslo.cache (>= 1.26.0),
+ python3-oslo.concurrency (>= 3.25.0),
+ python3-oslo.config (>= 1:5.1.0),
+ python3-oslo.context (>= 1:2.19.2),
+ python3-oslo.db (>= 4.27.0),
+ python3-oslo.i18n (>= 3.15.3),
+ python3-oslo.log (>= 3.36.0),
+ python3-oslo.messaging (>= 5.29.0),
+ python3-oslo.middleware (>= 3.31.0),
+ python3-oslo.policy (>= 1.30.0),
+ python3-oslo.privsep (>= 1.23.0),
+ python3-oslo.reports (>= 1.18.0),
+ python3-oslo.rootwrap (>= 5.8.0),
+ python3-oslo.serialization (>= 2.18.0),
+ python3-oslo.service (>= 1.24.0),
+ python3-oslo.utils (>= 3.33.0),
+ python3-oslo.versionedobjects (>= 1.31.2),
+ python3-osprofiler (>= 1.4.0),
+ python3-ovsdbapp (>= 0.9.1),
+ python3-paste (>= 2.0.2),
+ python3-pastedeploy (>= 1.5.0),
+ python3-pbr (>= 2.0.0),
+ python3-pecan (>= 1.3.2),
+ python3-psutil (>= 3.2.2),
+ python3-pymysql,
+ python3-pyroute2 (>= 0.4.21),
+ python3-requests (>= 2.14.2),
+ python3-routes (>= 2.3.1),
+ python3-ryu (>= 4.24),
+ python3-six (>= 1.10.0),
+ python3-sqlalchemy (>= 1.2.0),
+ python3-stevedore (>= 1:1.20.0),
+ python3-tenacity (>= 3.2.1),
+ python3-webob (>= 1:1.7.1),
+ ${misc:Depends},
+ ${python3:Depends},
+Provides:
+ ${python3:Provides},
+Description: Neutron is a virtual network service for Openstack - Python library
+ Neutron is a virtual network service for Openstack, and a part of
+ Netstack. Just like OpenStack Nova provides an API to dynamically
+ request and configure virtual servers, Neutron provides an API to
+ dynamically request and configure virtual networks. These networks
+ connect "interfaces" from other OpenStack services (e.g., virtual NICs
+ from Nova VMs). The Neutron API supports extensions to provide
+ advanced network capabilities (e.g., QoS, ACLs, network monitoring,
+ etc.)
+ .
+ This package provides the Python 3.x library.
+
+Package: neutron-common
+Architecture: all
+Depends:
+ adduser,
+ ipset,
+ ${misc:Depends},
+ ${python:Depends},
+Breaks:
+ neutron-dhcp-agent (<< 2:13.0.0-0ubuntu3~),
+ neutron-l3-agent (<< 2:13.0.0-0ubuntu3~),
+ neutron-linuxbridge-agent (<< 2:13.0.0-0ubuntu3~),
+ neutron-macvtap-agent (<< 2:13.0.0-0ubuntu3~),
+ neutron-metadata-agent (<< 2:13.0.0-0ubuntu3~),
+ neutron-metering-agent (<< 2:13.0.0-0ubuntu3~),
+ neutron-openvswitch-agent (<< 2:13.0.0-0ubuntu3~),
+ neutron-plugin-ml2 (<< 2:13.0.0-0ubuntu3~),
+ neutron-server (<< 2:2:13.0.0-0ubuntu3~),
+ neutron-sriov-agent (<< 2:13.0.0-0ubuntu3~),
+Replaces:
+ neutron-dhcp-agent (<< 2:13.0.0-0ubuntu3~),
+ neutron-l3-agent (<< 2:13.0.0-0ubuntu3~),
+ neutron-linuxbridge-agent (<< 2:13.0.0-0ubuntu3~),
+ neutron-macvtap-agent (<< 2:13.0.0-0ubuntu3~),
+ neutron-metadata-agent (<< 2:13.0.0-0ubuntu3~),
+ neutron-metering-agent (<< 2:13.0.0-0ubuntu3~),
+ neutron-openvswitch-agent (<< 2:13.0.0-0ubuntu3~),
+ neutron-plugin-ml2 (<< 2:13.0.0-0ubuntu3~),
+ neutron-server (<< 2:2:13.0.0-0ubuntu3~),
+ neutron-sriov-agent (<< 2:13.0.0-0ubuntu3~),
+Description: Neutron is a virtual network service for Openstack - common
+ Neutron is a virtual network service for Openstack, and a part of
+ Netstack. Just like OpenStack Nova provides an API to dynamically
+ request and configure virtual servers, Neutron provides an API to
+ dynamically request and configure virtual networks. These networks
+ connect "interfaces" from other OpenStack services (e.g., virtual NICs
+ from Nova VMs). The Neutron API supports extensions to provide
+ python-pbr (>= 2.0.0),
+ advanced network capabilities (e.g., QoS, ACLs, network monitoring,
+ etc.)
+ .
+ This package provides the common files.
