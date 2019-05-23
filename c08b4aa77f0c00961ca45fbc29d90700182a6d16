@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e1a03512_24c66573",
+        "filename": "neutron/conf/agent/securitygroups_rpc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000177
+      },
+      "writtenOn": "2019-05-23T21:57:42Z",
+      "side": 1,
+      "message": "I\u0027m probably wrong but if this is new functionality should it not default to false ?",
+      "revId": "c08b4aa77f0c00961ca45fbc29d90700182a6d16",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": true
+    }
+  ]
+}
