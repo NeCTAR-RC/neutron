@@ -121,6 +121,9 @@ class RpcCallbacks(type_tunnel.TunnelRpcCallbackMixin):
         segment = port_context.bottom_bound_segment
         port = port_context.current
 
+        if port.get('binding:vif_type') != 'bridge':
+            return {'device': device}
+
         if not segment:
             LOG.warning("Device %(device)s requested by agent "
                         "%(agent_id)s on network %(network_id)s not "
