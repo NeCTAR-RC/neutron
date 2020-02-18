@@ -1,7 +1,5 @@
-diff --git neutron/tests/unit/common/test_utils.py neutron/tests/unit/common/test_utils.py
-index 1a2fcd2120..4059641ee7 100644
---- neutron/tests/unit/common/test_utils.py
-+++ neutron/tests/unit/common/test_utils.py
+--- a/neutron/tests/unit/common/test_utils.py
++++ b/neutron/tests/unit/common/test_utils.py
 @@ -303,6 +303,7 @@ class TestDelayedStringRenderer(base.BaseTestCase):
          self.assertEqual("Type: Brie cheese!", string)
  
