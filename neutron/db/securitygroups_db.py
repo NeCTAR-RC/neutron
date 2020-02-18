@@ -680,13 +680,8 @@ class SecurityGroupDbMixin(ext_sg.SecurityGroupPluginBase,
         pager = base_obj.Pager(
             sorts=sorts, marker=marker, limit=limit, page_reverse=page_reverse)
 
-        # NOTE(slaweq): use admin context here to be able to get all rules
-        # which fits filters' criteria. Later in policy engine rules will be
-        # filtered and only those which are allowed according to policy will
-        # be returned
         rule_objs = sg_obj.SecurityGroupRule.get_objects(
-            context_lib.get_admin_context(), _pager=pager,
-            validate_filters=False, **filters
+            context, _pager=pager, validate_filters=False, **filters
         )
         return [
             self._make_security_group_rule_dict(obj.db_obj, fields)
@@ -701,12 +696,7 @@ class SecurityGroupDbMixin(ext_sg.SecurityGroupPluginBase,
 
     @db_api.retry_if_session_inactive()
     def get_security_group_rule(self, context, id, fields=None):
-        # NOTE(slaweq): use admin context here to be able to get all rules
-        # which fits filters' criteria. Later in policy engine rules will be
-        # filtered and only those which are allowed according to policy will
-        # be returned
-        security_group_rule = self._get_security_group_rule(
-            context_lib.get_admin_context(), id)
+        security_group_rule = self._get_security_group_rule(context, id)
         return self._make_security_group_rule_dict(
             security_group_rule.db_obj, fields)
 
