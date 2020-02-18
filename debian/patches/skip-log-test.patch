@@ -1,0 +1,12 @@
+diff --git neutron/tests/unit/common/test_utils.py neutron/tests/unit/common/test_utils.py
+index 1a2fcd2120..4059641ee7 100644
+--- neutron/tests/unit/common/test_utils.py
++++ neutron/tests/unit/common/test_utils.py
+@@ -303,6 +303,7 @@ class TestDelayedStringRenderer(base.BaseTestCase):
+         self.assertEqual("Type: Brie cheese!", string)
+ 
+     def test_not_called_with_low_log_level(self):
++        self.skipTest('Skipped in Ubuntu builds')
+         LOG = logging.getLogger(__name__)
+         # make sure we return logging to previous level
+         current_log_level = LOG.logger.getEffectiveLevel()
