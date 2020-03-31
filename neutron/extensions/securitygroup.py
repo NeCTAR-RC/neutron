@@ -194,9 +194,13 @@ def convert_ip_prefix_to_cidr(ip_prefix):
         return
     try:
         cidr = netaddr.IPNetwork(ip_prefix)
-        return str(cidr)
     except (ValueError, TypeError, netaddr.AddrFormatError):
         raise exceptions.InvalidCIDR(input=ip_prefix)
+
+    if str(cidr) != str(cidr.cidr):
+        raise exceptions.InvalidCIDR(input=ip_prefix)
+
+    return str(cidr)
 
 
 def _validate_name_not_default(data, max_len=db_const.NAME_FIELD_SIZE):

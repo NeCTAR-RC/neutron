@@ -1622,11 +1622,11 @@ class TestSecurityGroups(SecurityGroupDBTestCase):
             rule1 = self._build_security_group_rule(sg['security_group']['id'],
                                                     'ingress',
                                                     const.PROTO_NAME_TCP, '22',
-                                                    '22', '10.0.0.1/24')
+                                                    '22', '10.0.0.0/24')
             rule2 = self._build_security_group_rule(sg['security_group']['id'],
                                                     'ingress',
                                                     const.PROTO_NAME_TCP, '23',
-                                                    '23', '10.0.0.1/24')
+                                                    '23', '10.0.0.0/24')
             rules = {'security_group_rules': [rule1['security_group_rule'],
                                               rule2['security_group_rule']]}
             res = self._create_security_group_rule(self.fmt, rules)
@@ -1648,10 +1648,10 @@ class TestSecurityGroups(SecurityGroupDBTestCase):
             with self.security_group() as sg:
                 rule1 = self._build_security_group_rule(
                     sg['security_group']['id'], 'ingress',
-                    const.PROTO_NAME_TCP, '22', '22', '10.0.0.1/24')
+                    const.PROTO_NAME_TCP, '22', '22', '10.0.0.0/24')
                 rule2 = self._build_security_group_rule(
                     sg['security_group']['id'], 'ingress',
-                    const.PROTO_NAME_TCP, '23', '23', '10.0.0.1/24')
+                    const.PROTO_NAME_TCP, '23', '23', '10.0.0.0/24')
                 rules = {'security_group_rules': [rule1['security_group_rule'],
                                                   rule2['security_group_rule']]
                          }
@@ -1698,7 +1698,7 @@ class TestSecurityGroups(SecurityGroupDBTestCase):
             rule = self._build_security_group_rule(sg['security_group']['id'],
                                                    'ingress',
                                                    const.PROTO_NAME_TCP, '22',
-                                                   '22', '10.0.0.1/24')
+                                                   '22', '10.0.0.0/24')
             rules = {'security_group_rules': [rule['security_group_rule'],
                                               rule['security_group_rule']]}
             res = self._create_security_group_rule(self.fmt, rules)
@@ -1720,7 +1720,7 @@ class TestSecurityGroups(SecurityGroupDBTestCase):
             with self.security_group() as sg:
                 rule = self._build_security_group_rule(
                     sg['security_group']['id'], 'ingress',
-                    const.PROTO_NAME_TCP, '22', '22', '10.0.0.1/24')
+                    const.PROTO_NAME_TCP, '22', '22', '10.0.0.0/24')
                 rules = {'security_group_rules': [rule['security_group_rule'],
                                                   rule['security_group_rule']]}
                 res = self._create_security_group_rule(self.fmt, rules)
@@ -1735,7 +1735,7 @@ class TestSecurityGroups(SecurityGroupDBTestCase):
             rule = self._build_security_group_rule(sg['security_group']['id'],
                                                    'ingress',
                                                    const.PROTO_NAME_TCP, '22',
-                                                   '22', '10.0.0.1/24')
+                                                   '22', '10.0.0.0/24')
             rules = {'security_group_rules': [rule]}
             self._create_security_group_rule(self.fmt, rules)
             res = self._create_security_group_rule(self.fmt, rules)
@@ -1756,7 +1756,7 @@ class TestSecurityGroups(SecurityGroupDBTestCase):
             with self.security_group() as sg:
                 rule = self._build_security_group_rule(
                     sg['security_group']['id'], 'ingress',
-                    const.PROTO_NAME_TCP, '22', '22', '10.0.0.1/24')
+                    const.PROTO_NAME_TCP, '22', '22', '10.0.0.0/24')
                 rules = {'security_group_rules': [rule]}
                 self._create_security_group_rule(self.fmt, rules)
                 res = self._create_security_group_rule(self.fmt, rule)
@@ -1804,10 +1804,10 @@ class TestSecurityGroups(SecurityGroupDBTestCase):
             with self.security_group() as sg2:
                 rule1 = self._build_security_group_rule(
                     sg1['security_group']['id'], 'ingress',
-                    const.PROTO_NAME_TCP, '22', '22', '10.0.0.1/24')
+                    const.PROTO_NAME_TCP, '22', '22', '10.0.0.0/24')
                 rule2 = self._build_security_group_rule(
                     sg2['security_group']['id'], 'ingress',
-                    const.PROTO_NAME_TCP, '23', '23', '10.0.0.1/24')
+                    const.PROTO_NAME_TCP, '23', '23', '10.0.0.0/24')
 
                 rules = {'security_group_rules': [rule1['security_group_rule'],
                                                   rule2['security_group_rule']]
@@ -1901,6 +1901,12 @@ class TestConvertIPPrefixToCIDR(base.BaseTestCase):
             self.assertRaises(exceptions.InvalidCIDR,
                               ext_sg.convert_ip_prefix_to_cidr, val)
         self.assertIsNone(ext_sg.convert_ip_prefix_to_cidr(None))
+
+    def test_convert_bad_ip_prefix_with_hostbits_to_cidr(self):
+        addresses = ['10.1.1.1/16', '2001:db8:a::123/48']
+        for addr in addresses:
+            self.assertRaises(exceptions.InvalidCIDR,
+                              ext_sg.convert_ip_prefix_to_cidr, addr)
 
     def test_convert_ip_prefix_no_netmask_to_cidr(self):
         addr = {'10.1.2.3': '32', 'fe80::2677:3ff:fe7d:4c': '128'}
