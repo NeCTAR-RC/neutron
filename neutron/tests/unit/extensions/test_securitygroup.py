@@ -1913,6 +1913,12 @@ class TestConvertIPPrefixToCIDR(base.BaseTestCase):
         for addr in addresses:
             self.assertEqual(addr, ext_sg.convert_ip_prefix_to_cidr(addr))
 
+    def test_coerce_ip_prefix_with_hostbits_to_cidr(self):
+        addresses = ['10.1.1.1/16', '2001:db8:a::123/48']
+        cidrs = ['10.1.0.0/16', '2001:db8:a::/48']
+        for addr, cidr in zip(addresses, cidrs):
+            self.assertEqual(cidr, ext_sg.convert_ip_prefix_to_cidr(addr))
+
 
 class TestConvertProtocol(base.BaseTestCase):
     def test_convert_numeric_protocol(self):
