@@ -219,7 +219,7 @@ class NeutronManagerTestCase(base.BaseTestCase):
     def test_dhcp_agents_per_network_min(self):
         # Ensures dhcp_agents_per_network must be at least 1.
         self.assertRaises(ValueError, cfg.CONF.set_override,
-                          'dhcp_agents_per_network', 0)
+                          'dhcp_agents_per_network', -1)
 
     def test_pre_plugin_validation(self):
         self.assertIsNotNone(manager.validate_pre_plugin_load())
