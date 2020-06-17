@@ -109,6 +109,10 @@ def get_vacant_binding_index(num_agents, bindings, lowest_binding_index,
     if not force_scheduling:
         return -1
 
+    # allow for dhcp_agents_per_network being set to 0
+    if len(binding_indices) == 0:
+        return 1
+
     # Last chance: if this is a manual scheduling, we're gonna allow
     # creation of a binding_index even if it will exceed
     # dhcp_agents_per_network.
