@@ -1,5 +1,4 @@
 skip-iptest.patch
 flake8-legacy.patch
-lp1877797.patch
 set-openflow-protocols-by-default-on-bridges.patch
 fix-manifest.patch
