@@ -47,7 +47,11 @@ def get_interface_ifindex(interface):
 
 
 def get_bridge_names():
-    return os.listdir(BRIDGE_FS)
+    names = []
+    for i in os.listdir(BRIDGE_FS):
+        if not os.path.exists(os.path.join(BRIDGE_FS, i, 'upper_midonet')):
+            names.append(i)
+    return names
 
 
 class BridgeDevice(ip_lib.IPDevice):
