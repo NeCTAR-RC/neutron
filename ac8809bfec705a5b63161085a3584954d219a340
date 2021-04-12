@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27a843c7_e93cb50c",
+        "filename": "neutron/scheduler/base_scheduler.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-12T23:08:06Z",
+      "side": 1,
+      "message": "fix up indentation",
+      "revId": "ac8809bfec705a5b63161085a3584954d219a340",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": true
+    }
+  ]
+}
