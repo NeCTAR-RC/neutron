@@ -36,6 +36,7 @@ Build-Depends-Indep:
  python3-neutron-lib (>= 2.2.0),
  python3-neutronclient (>= 1:6.7.0),
  python3-novaclient (>= 2:9.1.0),
+ python3-openssl (>=17.1.0),
  python3-openstackdocstheme (>= 1.30.0),
  python3-openstacksdk (>= 0.31.2),
  python3-openvswitch (>= 2.8.0),
