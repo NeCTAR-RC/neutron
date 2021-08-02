@@ -94,6 +94,10 @@ class TestLinuxBridgeARPSpoofing(base.BaseTestCase):
                        spoof_chain],
                       check_exit_code=True, extra_ok_codes=None,
                       log_fail_as_error=True, run_as_root=True),
+            mock.call(['ebtables', '-t', 'nat', '--concurrent', '-P',
+                       spoof_chain, 'DROP'],
+                      check_exit_code=True, extra_ok_codes=None,
+                      log_fail_as_error=True, run_as_root=True),
         ]
         for addr in sorted(ip_addresses):
             expected.extend([
