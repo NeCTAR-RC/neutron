@@ -137,6 +137,7 @@ def _install_arp_spoofing_protection(vif, addresses, current_rules):
     # packets until the allows are installed, but that's better than leaked
     # spoofed packets and ARP can handle losses.
     ebtables(['-F', vif_chain])
+    ebtables(['-P', vif_chain, 'DROP'])
     for addr in sorted(addresses):
         ebtables(['-A', vif_chain, '-p', 'ARP', '--arp-ip-src', addr,
                   '-j', 'ACCEPT'])
