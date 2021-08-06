@@ -1,0 +1,2 @@
+[ovn]
+vhost_sock_dir = /var/run/openvswitch
