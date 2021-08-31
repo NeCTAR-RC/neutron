@@ -1364,12 +1364,6 @@ class OvnSbSynchronizer(OvnDbSynchronizer):
         previous_hosts = segments_db.get_hosts_mapped_with_segments(
             ctx, include_agent_types={ovn_const.OVN_CONTROLLER_AGENT})
 
-        stale_hosts = previous_hosts - current_hosts
-        for host in stale_hosts:
-            LOG.debug('Stale host %s found in Neutron, but not in OVN SB DB. '
-                      'Clear its SegmentHostMapping in Neutron', host)
-            self.ovn_driver.update_segment_host_mapping(host, [])
-
         new_hosts = current_hosts - previous_hosts
         for host in new_hosts:
             LOG.debug('New host %s found in OVN SB DB, but not in Neutron. '
