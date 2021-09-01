@@ -16,6 +16,23 @@
       "message": "pep8 test is failing because this is running on a Focal node.\n\noverriding verify instead of fixing as we are moving to Victoria.",
       "revId": "017acc5962a706dde79c220531955364ddbaedc5",
       "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b5da850_0ec7c991",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000104
+      },
+      "writtenOn": "2021-09-01T03:22:17Z",
+      "side": 1,
+      "message": "by the way, this works on focal if we change this in tox.ini\n\n [testenv]\n-basepython \u003d python3\n+basepython \u003d python3.7",
+      "revId": "017acc5962a706dde79c220531955364ddbaedc5",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5"
     }
   ]
 }
