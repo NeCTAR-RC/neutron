@@ -873,6 +873,10 @@ class OvnNbSynchronizer(OvnDbSynchronizer):
                 LOG.warning('Missing metadata port found in Neutron for '
                             'network %s', net['id'])
                 if self.mode == SYNC_MODE_REPAIR:
+                    if net['provider:network_type'] == 'uplink':
+                        LOG.warning('Skipping metadadata port for uplink '
+                                    'network %s', net['id'])
+                        continue
                     try:
                         # Create the missing port in both Neutron and OVN.
                         LOG.warning('Creating missing metadadata port in '
