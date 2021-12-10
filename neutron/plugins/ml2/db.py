@@ -213,6 +213,24 @@ def make_port_dict_with_security_groups(port, sec_groups):
     return port_dict
 
 
+def get_port_binding(context, port_id):
+    try:
+        with db_api.CONTEXT_READER.using(context):
+            query = (context.session.query(models.PortBinding).
+                     filter(models.PortBinding.port_id.startswith(port_id)))
+            query = query.filter(
+                models.PortBinding.status == n_const.ACTIVE).one()
+    except exc.NoResultFound:
+        LOG.debug("No active binding found for port %(port_id)s",
+                  {'port_id': port_id})
+        return
+    except exc.MultipleResultsFound:
+        LOG.error("Multiple ports have port_id starting with %s",
+                  port_id)
+        return
+    return query
+
+
 def get_port_binding_host(context, port_id):
     try:
         with db_api.CONTEXT_READER.using(context):
