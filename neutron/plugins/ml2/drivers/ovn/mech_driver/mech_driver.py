@@ -1216,6 +1216,12 @@ class OVNMechanismDriver(api.MechanismDriver):
             db_port = ml2_db.get_port(admin_context, port_id)
             if not db_port:
                 return
+            # NOTE(jake): do not set bounded linuxbridge ports to DOWN. This
+            # does not affect unbounded ports as they will be DOWN anyway.
+            db_port_binding = ml2_db.get_port_binding(admin_context, port_id)
+            if db_port_binding and db_port_binding.vif_type == 'bridge':
+                LOG.info("OVN skipping linuxbridge port: %s", port_id)
+                return
 
             self._insert_port_provisioning_block(admin_context, port_id)
             self._plugin.update_port_status(admin_context, port_id,
