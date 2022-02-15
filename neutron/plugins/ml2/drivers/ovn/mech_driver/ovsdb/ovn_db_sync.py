@@ -278,17 +278,34 @@ class OvnNbSynchronizer(OvnDbSynchronizer):
         def get_num_acls(ovn_acls):
             return len([item for sublist in ovn_acls for item in sublist[1]])
 
+        # return a key for sorting list of ACLs
+        def _get_key(acl):
+            return acl['match']
+
         ovn_acls_from_ls = [(row.name, row.acls) for row in (
             self.ovn_api._tables['Logical_Switch'].rows.values())]
         num_acls_to_remove_from_ls = get_num_acls(ovn_acls_from_ls)
-
         # Remove the common ones
-        for na in list(neutron_acls):
-            for ovn_a in ovn_acls:
-                if all(item in na.items() for item in ovn_a.items()):
-                    neutron_acls.remove(na)
-                    ovn_acls.remove(ovn_a)
-                    break
+        neutron_acls.sort(key=_get_key)
+        ovn_acls.sort(key=_get_key)
+        i = j = 0
+        while i < len(neutron_acls) and j < len(ovn_acls):
+            n = neutron_acls[i]
+            o = ovn_acls[j]
+            if _get_key(n) == _get_key(o):
+                # ovn has an extra label tag
+                on = o.copy()
+                on.pop('label', False)
+                if all(item in n.items() for item in on.items()):
+                    neutron_acls.remove(n)
+                    ovn_acls.remove(o)
+                else:
+                    i += 1
+                    j += 1
+            elif _get_key(n) < _get_key(o):
+                i += 1
+            elif _get_key(n) > _get_key(o):
+                j += 1
 
         num_acls_to_add = len(neutron_acls)
         num_acls_to_remove = len(ovn_acls) + num_acls_to_remove_from_ls
