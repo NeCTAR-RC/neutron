@@ -27,6 +27,7 @@ LOG = logging.getLogger(__name__)
 
 
 def main():
+    config.register_common_config_options()
     ovn_conf.register_opts()
     ovn_meta.register_meta_conf_opts(meta.SHARED_OPTS)
     ovn_meta.register_meta_conf_opts(meta.UNIX_DOMAIN_METADATA_PROXY_OPTS)
