@@ -44,6 +44,7 @@ from oslo_utils import uuidutils
 from ovsdbapp.backend.ovs_idl import idlutils
 from webob import exc
 
+from neutron.common import config
 from neutron.common.ovn import acl as ovn_acl
 from neutron.common.ovn import constants as ovn_const
 from neutron.common.ovn import exceptions as ovn_exceptions
@@ -159,6 +160,9 @@ class TestOVNMechanismDriverBase(MechDriverSetupBase,
                                        group='ovn')
         ovn_conf.cfg.CONF.set_override('dns_servers', ['8.8.8.8'],
                                        group='ovn')
+        # Need to register here for 'vlan_transparent' config before
+        # setting up test_plugin
+        config.register_common_config_options()
         cfg.CONF.set_override('vlan_transparent', True)
         cfg.CONF.set_override('ovsdb_connection_timeout', 30, group='ovn')
         mock.patch.object(impl_idl_ovn.Backend, 'schema_helper').start()
@@ -2563,7 +2567,6 @@ class OVNMechanismDriverTestCase(MechDriverSetupBase,
 
     def setUp(self):
         ovn_conf.register_opts()
-        cfg.CONF.set_override('global_physnet_mtu', 1550)
         cfg.CONF.set_override('tenant_network_types',
                               ['geneve'],
                               group='ml2')
@@ -2576,6 +2579,7 @@ class OVNMechanismDriverTestCase(MechDriverSetupBase,
         ovn_conf.cfg.CONF.set_override('dns_servers', ['8.8.8.8'], group='ovn')
         mock.patch.object(impl_idl_ovn.Backend, 'schema_helper').start()
         super(OVNMechanismDriverTestCase, self).setUp()
+        cfg.CONF.set_override('global_physnet_mtu', 1550)
         # Make sure the node and target_node for the hash ring in the
         # mechanism driver matches
         node_uuid = uuidutils.generate_uuid()
