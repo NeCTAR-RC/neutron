@@ -313,6 +313,8 @@ class DhcpLocalProcess(DhcpBase, metaclass=abc.ABCMeta):
 
     def _enable_dhcp(self):
         """check if there is a subnet within the network with dhcp enabled."""
+        if self.network.get('provider:network_type') in ['midonet', 'geneve']:
+            return False
         for subnet in self.network.subnets:
             if subnet.enable_dhcp:
                 return True
