@@ -672,6 +672,9 @@ class FakeV4Network(object):
         self.ports = [FakePort1()]
         self.namespace = 'qdhcp-ns'
 
+    def get(self, *args, **kwargs):
+        return None
+
 
 class FakeV4NetworkClientId(object):
     def __init__(self):
@@ -714,6 +717,9 @@ class FakeDualNetwork(object):
                       FakeDualPort(domain=domain),
                       FakeRouterHAPort(),
                       FakeRouterPort(domain=domain)]
+
+    def get(self, *args, **kwargs):
+        return None
 
 
 class FakeDeviceManagerNetwork(object):
