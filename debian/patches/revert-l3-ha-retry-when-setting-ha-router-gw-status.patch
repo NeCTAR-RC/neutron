@@ -1,0 +1,60 @@
+From f8fabfce77d7c1153e9c4d38b58068f7b117639b Mon Sep 17 00:00:00 2001
+From: Corey Bryant <corey.bryant@canonical.com>
+Date: Wed, 28 Jul 2021 16:51:06 -0400
+Subject: [PATCH] Revert "[L3][HA] Retry when setting HA router GW status."
+
+This reverts commit 662f483120972a373e19bde52f16392e2ccb9c82.
+---
+ neutron/agent/l3/ha_router.py    |  7 ++-----
+ neutron/agent/linux/interface.py | 12 +++---------
+ 2 files changed, 5 insertions(+), 14 deletions(-)
+
+diff --git a/neutron/agent/l3/ha_router.py b/neutron/agent/l3/ha_router.py
+index b91448c7de..d026b1cf2e 100644
+--- a/neutron/agent/l3/ha_router.py
++++ b/neutron/agent/l3/ha_router.py
+@@ -544,11 +544,8 @@ class HaRouter(router.RouterInfo):
+         if ex_gw_port_id:
+             interface_name = self.get_external_device_name(ex_gw_port_id)
+             ns_name = self.get_gw_ns_name()
+-            if (not self.driver.set_link_status(
+-                    interface_name, namespace=ns_name, link_up=link_up) and
+-                    link_up):
+-                LOG.error('Gateway interface for router %s was not set up; '
+-                          'router will not work properly', self.router_id)
++            self.driver.set_link_status(interface_name, ns_name,
++                                        link_up=link_up)
+             if link_up and set_gw:
+                 preserve_ips = self.get_router_preserve_ips()
+                 self._external_gateway_settings(ex_gw_port, interface_name,
+diff --git a/neutron/agent/linux/interface.py b/neutron/agent/linux/interface.py
+index c4919def68..022488c4f5 100644
+--- a/neutron/agent/linux/interface.py
++++ b/neutron/agent/linux/interface.py
+@@ -322,20 +322,14 @@ class LinuxInterfaceDriver(object, metaclass=abc.ABCMeta):
+ 
+     def set_link_status(self, device_name, namespace=None, link_up=True):
+         ns_dev = ip_lib.IPWrapper(namespace=namespace).device(device_name)
+-        try:
+-            utils.wait_until_true(ns_dev.exists, timeout=3)
+-        except utils.WaitTimeout:
+-            LOG.debug('Device %s may have been deleted concurrently',
+-                      device_name)
+-            return False
+-
++        if not ns_dev.exists():
++            LOG.debug("Device %s may concurrently be deleted.", device_name)
++            return
+         if link_up:
+             ns_dev.link.set_up()
+         else:
+             ns_dev.link.set_down()
+ 
+-        return True
+-
+ 
+ class NullDriver(LinuxInterfaceDriver):
+     def plug_new(self, network_id, port_id, device_name, mac_address,
+-- 
+2.31.1
+

@@ -1,0 +1,43 @@
+#!/bin/bash
+#-----------------------
+# Testing neutron agents
+#-----------------------
+set -e
+
+arch=$(dpkg --print-architecture)
+
+DAEMONS=('neutron-l3-agent' 'neutron-dhcp-agent' 'neutron-metadata-agent')
+if [ $arch != "armhf" ]; then
+    # Note(coreycb): neutron-ovn-metadata-agent depends on openvswitch which
+    # fails on armhf autopkgtest. openvswitch autopkgtests have always failed
+    # on armhf according to proposed-migration reports, so skip for armhf.
+    DAEMONS+=('neutron-ovn-metadata-agent')
+fi
+
+apt-get -y install ${DAEMONS[@]}
+
+# update interface drives
+sed -i 's/#interface_driver =.*/interface_driver = neutron.agent.linux.interface.OVSInterfaceDriver/g' /etc/neutron/l3_agent.ini
+sed -i 's/#interface_driver =.*/interface_driver = neutron.agent.linux.interface.OVSInterfaceDriver/g' /etc/neutron/dhcp_agent.ini
+
+for daemon in "${DAEMONS[@]}"; do
+    TIMEOUT=50
+    systemctl restart $daemon
+    while [ "$TIMEOUT" -gt 0 ]; do
+        if service $daemon status > /dev/null; then
+            echo "OK"
+            break
+        fi
+        TIMEOUT=$((TIMEOUT - 1))
+        sleep 0.5
+    done
+
+    if [ "$TIMEOUT" -le 0 ]; then
+        echo "ERROR: ${daemon} IS NOT RUNNING"
+        tail -100 /var/log/neutron/*.log
+        apt-get -y remove --purge ${DAEMONS[@]}
+        exit 1
+    fi
+done
+
+apt-get -y remove --purge ${DAEMONS[@]}
