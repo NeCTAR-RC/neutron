@@ -1,0 +1,20 @@
+[Unit]
+Description=Openstack Neutron Open vSwitch Plugin Agent
+After=mysql.service postgresql.service rabbitmq-server.service keystone.service neutron-ovs-cleanup.service
+Requires=neutron-ovs-cleanup.service
+
+[Service]
+User=neutron
+Group=neutron
+WorkingDirectory=/var/lib/neutron
+PermissionsStartOnly=true
+ExecStartPre=/bin/mkdir -p /var/lock/neutron /var/log/neutron /var/lib/neutron
+ExecStartPre=/bin/chown neutron:neutron /var/lock/neutron /var/log/neutron /var/lib/neutron
+ExecStartPre=-/sbin/modprobe br_netfilter
+ExecStart=/etc/init.d/neutron-openvswitch-agent systemd-start
+Restart=on-failure
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target
+
