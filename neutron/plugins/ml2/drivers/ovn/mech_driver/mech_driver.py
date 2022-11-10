@@ -521,12 +521,15 @@ class OVNMechanismDriver(api.MechanismDriver):
                 return True
         return False
 
-    def _is_network_type_supported(self, network_type):
-        return (network_type in [const.TYPE_LOCAL,
-                                 const.TYPE_FLAT,
-                                 const.TYPE_GENEVE,
-                                 const.TYPE_VXLAN,
-                                 const.TYPE_VLAN])
+    def _is_network_type_supported(self, network_type, mido_allowed=False):
+        allowed = [const.TYPE_LOCAL,
+                   const.TYPE_FLAT,
+                   const.TYPE_GENEVE,
+                   const.TYPE_VXLAN,
+                   const.TYPE_VLAN]
+        if mido_allowed:
+            allowed.append('midonet')
+        return network_type in allowed
 
     def _get_max_tunid(self):
         try:
@@ -548,7 +551,8 @@ class OVNMechanismDriver(api.MechanismDriver):
                       {'network_type': network_type,
                        'segmentation_id': segmentation_id,
                        'physical_network': physical_network})
-            if not self._is_network_type_supported(network_type):
+            if not self._is_network_type_supported(network_type,
+                                                   mido_allowed=True):
                 msg = _('Network type %s is not supported') % network_type
                 raise n_exc.InvalidInput(error_message=msg)
             if segmentation_id and max_tunid and segmentation_id > max_tunid:
@@ -1028,6 +1032,12 @@ class OVNMechanismDriver(api.MechanismDriver):
                           'host': context.host,
                           'chassis_physnets': chassis_physnets,
                           'physical_network': physical_network})
+            elif network_type == 'midonet':
+                LOG.info('Refusing to bind port %(port_id)s on '
+                         'host %(host)s due to network type is '
+                         'midonet',
+                         {'port_id': port['id'],
+                          'host': context.host})
             else:
                 if (datapath_type == ovn_const.CHASSIS_DATAPATH_NETDEV and
                         ovn_const.CHASSIS_IFACE_DPDKVHOSTUSER in iface_types):
