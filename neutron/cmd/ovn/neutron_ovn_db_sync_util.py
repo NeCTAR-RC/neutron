@@ -191,10 +191,6 @@ def main():
             LOG.error('please use --config-file to specify '
                       'neutron and ml2 configuration file.')
             return
-        if 'ovn' not in cfg.CONF.ml2.mechanism_drivers:
-            LOG.error('No "ovn" mechanism driver found : "%s".',
-                      cfg.CONF.ml2.mechanism_drivers)
-            return
         cfg.CONF.set_override('mechanism_drivers', ['ovn-sync'], 'ml2')
         conf.service_plugins = [
             'neutron.services.ovn_l3.plugin.OVNL3RouterPlugin',
