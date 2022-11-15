@@ -229,7 +229,8 @@ class DhcpRpcCallback(object):
         # the order changes.
         # TODO(ralonsoh): in Z+, remove "tenant_id" parameter. DHCP agents
         # should read only "project_id".
-        return {'id': network.id,
+
+        data = {'id': network.id,
                 'project_id': network.project_id,
                 'tenant_id': network.project_id,
                 'admin_state_up': network.admin_state_up,
@@ -237,7 +238,11 @@ class DhcpRpcCallback(object):
                 'non_local_subnets': sorted(nonlocal_subnets,
                                             key=operator.itemgetter('id')),
                 'ports': ports,
-                'mtu': network.mtu}
+                'mtu': network.mtu,
+                }
+        if network.segments:
+            data['provider:network_type'] = network.segments[0].network_type
+        return data
 
     @db_api.retry_db_errors
     def release_dhcp_port(self, context, **kwargs):

@@ -206,7 +206,7 @@ class TestDhcpRpcCallback(base.BaseTestCase):
                            if subnet.get('segment_id') in segment_ids]
             else:
                 non_local_subnets = []
-            return {'id': network.id,
+            data = {'id': network.id,
                     'project_id': network.project_id,
                     'tenant_id': network.project_id,
                     'admin_state_up': network.admin_state_up,
@@ -215,6 +215,10 @@ class TestDhcpRpcCallback(base.BaseTestCase):
                     'non_local_subnets': sorted(non_local_subnets,
                                                 key=operator.itemgetter('id')),
                     'mtu': network.mtu}
+            if segmented_network:
+                data['provider:network_type'] = \
+                    network.segments[0].network_type
+            return data
 
         def _make_subnet_dict(subnet):
             ret = {'id': subnet.id}
@@ -243,6 +247,8 @@ class TestDhcpRpcCallback(base.BaseTestCase):
         if segmented_network:
             network.segments = [mock.Mock(id='1', hosts=['host1']),
                                 mock.Mock(id='2', hosts=['host2'])]
+        else:
+            network.segments = []
 
         _kwargs = {'network_id': 'a', 'host': 'host1'}
         if network_info:
