@@ -1,0 +1,4 @@
+debian/mans/neutron-linuxbridge-agent.8
+debian/mans/neutron-openvswitch-agent.8
+debian/mans/neutron-rootwrap.8
+debian/mans/neutron-server.8

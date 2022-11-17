@@ -1,0 +1,8 @@
+[DEFAULT]
+core_plugin = ml2
+
+[database]
+connection = sqlite:////var/lib/neutron/neutron.sqlite
+
+[agent]
+root_helper = "sudo /usr/bin/neutron-rootwrap /etc/neutron/rootwrap.conf"

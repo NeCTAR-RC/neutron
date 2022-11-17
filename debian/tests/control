@@ -1,0 +1,6 @@
+Tests: neutron-server neutron-agents
+Depends:
+ mysql-server,
+ neutron-server,
+ rabbitmq-server,
+Restrictions: needs-root allow-stderr needs-recommends
