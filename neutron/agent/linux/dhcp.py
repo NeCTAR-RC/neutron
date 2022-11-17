@@ -1390,6 +1390,8 @@ class Dnsmasq(DhcpLocalProcess):
         providing access to the metadata service via logical routers built
         with 3rd party backends.
         """
+        if network.get('provider:network_type') in ['midonet', 'geneve']:
+            return False
         all_subnets = cls._get_all_subnets(network)
         dhcp_subnets = [s for s in all_subnets if s.enable_dhcp]
         if not dhcp_subnets:
