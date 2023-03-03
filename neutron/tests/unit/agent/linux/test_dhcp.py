@@ -707,9 +707,6 @@ class FakeV6Network(object):
         self.ports = [FakePort2()]
         self.namespace = 'qdhcp-ns'
 
-    def get(self, *args, **kwargs):
-        return None
-
 
 class FakeDualNetwork(object):
     def __init__(self, domain='openstacklocal'):
@@ -778,9 +775,6 @@ class FakeDualNetworkSingleDHCP(object):
         self.ports = [FakePort1(), FakePort2(), FakePort3(), FakeRouterPort()]
         self.namespace = 'qdhcp-ns'
 
-    def get(self, *args, **kwargs):
-        return None
-
 
 class FakeDualNetworkSingleDHCPBothAttaced(object):
     def __init__(self):
@@ -839,18 +833,12 @@ class FakeV4NetworkNoRouter(object):
         self.subnets = [FakeV4SubnetNoRouter()]
         self.ports = [FakePort1()]
 
-    def get(self, *args, **kwargs):
-        return None
-
 
 class FakeV4MetadataNetwork(object):
     def __init__(self):
         self.id = 'cccccccc-cccc-cccc-cccc-cccccccccccc'
         self.subnets = [FakeV4MetadataSubnet()]
         self.ports = [FakeRouterPort(ip_address='169.254.169.253')]
-
-    def get(self, *args, **kwargs):
-        return None
 
 
 class FakeV4NetworkDistRouter(object):
@@ -860,9 +848,6 @@ class FakeV4NetworkDistRouter(object):
         self.ports = [FakePort1(),
                       FakeRouterPort(
                           dev_owner=constants.DEVICE_OWNER_DVR_INTERFACE)]
-
-    def get(self, *args, **kwargs):
-        return None
 
 
 class FakeDualV4Pxe3Ports(object):
