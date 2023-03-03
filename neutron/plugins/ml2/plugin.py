@@ -127,6 +127,7 @@ from neutron.extensions import filter_validation
 from neutron.extensions import security_groups_shared_filtering_lib
 from neutron.extensions import vlantransparent
 from neutron.ipam import exceptions as ipam_exc
+from neutron.nectar import utils as nectar_utils
 from neutron.objects import base as base_obj
 from neutron.objects import ports as ports_obj
 from neutron.plugins.ml2.common import constants as ml2_consts
@@ -1250,6 +1251,20 @@ class Ml2Plugin(db_base_plugin_v2.NeutronDbPluginV2,
 
         return db_utils.resource_fields(net_data, fields)
 
+    def _nectar_filter(self, context, nets):
+        # Admin can see all networks
+        if context.is_admin:
+            return nets
+        networks = []
+        if nectar_utils.use_legacy(context, cfg.CONF):
+            strip = 'ovn'
+        else:
+            strip = 'midonet'
+        for net in nets:
+            if strip not in net.get('tags'):
+                networks.append(net)
+        return networks
+
     @db_api.retry_if_session_inactive()
     def get_networks(self, context, filters=None, fields=None,
                      sorts=None, limit=None, marker=None, page_reverse=False):
@@ -1263,6 +1278,9 @@ class Ml2Plugin(db_base_plugin_v2.NeutronDbPluginV2,
 
             self.type_manager.extend_networks_dict_provider(context, net_data)
             nets = self._filter_nets_provider(context, net_data, filters)
+
+        if 'nectar_l3' in cfg.CONF.service_plugins:
+            nets = self._nectar_filter(context, nets)
         return [db_utils.resource_fields(net, fields) for net in nets]
 
     def get_network_contexts(self, context, network_ids):

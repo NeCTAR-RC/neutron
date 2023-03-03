@@ -33,6 +33,7 @@ import stevedore
 from neutron._i18n import _
 from neutron.conf.plugins.ml2 import config
 from neutron.db import segments_db
+from neutron.nectar import utils as nectar_utils
 from neutron.objects import ports
 from neutron.plugins.ml2.common import exceptions as ml2_exc
 
@@ -324,6 +325,11 @@ class TypeManager(stevedore.named.NamedExtensionManager):
             return driver.obj.allocate_tenant_segment(context, filters)
 
     def _allocate_tenant_net_segment(self, context, filters=None):
+        if 'nectar_l3' in cfg.CONF.service_plugins:
+            if nectar_utils.use_legacy(context, cfg.CONF):
+                self.tenant_network_types = ['midonet']
+            else:
+                self.tenant_network_types = ['geneve']
         for network_type in self.tenant_network_types:
             segment = self._allocate_segment(context, network_type, filters)
             if segment:
