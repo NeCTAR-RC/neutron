@@ -466,10 +466,23 @@ class OvnNbSynchronizer(OvnDbSynchronizer):
         LOG.debug('OVN-NB Sync Routers and Router ports started @ %s',
                   str(datetime.now()))
 
+        # ignore routers on midonet/uplink net, they will never be used on ovn
+        excluded_net_ids = [
+                net['id'] for net in
+                self.core_plugin.get_networks(ctx) if
+                net.get('provider:network_type') in ['midonet', 'uplink']]
+
+        # NOTE: new routers that may not have have external_gateway set
+        # only filter out routers that have external_gateway set to midonet
+        routers = [r for r in self.l3_plugin.get_routers(ctx) if
+                (r.get('external_gateway_info') is None or
+                    r.get('external_gateway_info')['network_id'] not in
+                    excluded_net_ids)]
+
         db_routers = {}
         db_extends = {}
         db_router_ports = {}
-        for router in self.l3_plugin.get_routers(ctx):
+        for router in routers:
             db_routers[router['id']] = router
             db_extends[router['id']] = {}
             db_extends[router['id']]['routes'] = []
