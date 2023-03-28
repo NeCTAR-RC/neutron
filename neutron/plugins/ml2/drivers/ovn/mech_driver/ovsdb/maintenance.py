@@ -577,7 +577,7 @@ class DBInconsistenciesPeriodics(SchemaAwarePeriodicsBase):
 
         context = n_context.get_admin_context()
         for net in self._ovn_client._plugin.get_networks(
-                context, {external_net.EXTERNAL: [True]}):
+                context, {external_net.EXTERNAL: [True], 'tags': 'ovn'}):
             self._ovn_client.set_gateway_mtu(context, net)
 
         raise periodics.NeverAgain()
