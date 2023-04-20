@@ -1,3 +1,2 @@
 skip-iptest.patch
-partially-revert-do-not-link-up-ha-router-gateway-in.patch
 fix-manifest.patch
