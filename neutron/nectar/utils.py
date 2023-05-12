@@ -28,7 +28,7 @@ def use_legacy(context, conf):
     if not context.project_id:
         return False
     project_tags = get_project_tags(context, conf)
-    return 'ovn-networking' not in project_tags
+    return 'legacy-networking' in project_tags
 
 
 def get_project_tags(context, conf):
