@@ -1,6 +1,6 @@
 [Unit]
 Description=Openstack Neutron Open vSwitch Plugin Agent
-After=mysql.service postgresql.service rabbitmq-server.service keystone.service neutron-ovs-cleanup.service
+After=mysql.service postgresql.service rabbitmq-server.service keystone.service neutron-ovs-cleanup.service network-online.target
 Requires=neutron-ovs-cleanup.service
 
 [Service]

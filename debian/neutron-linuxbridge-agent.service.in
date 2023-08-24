@@ -1,6 +1,6 @@
 [Unit]
 Description=Openstack Neutron Linux Bridge Agent
-After=mysql.service postgresql.service rabbitmq-server.service keystone.service
+After=mysql.service postgresql.service rabbitmq-server.service keystone.service network-online.target
 Requires=neutron-linuxbridge-cleanup.service
 
 [Service]
