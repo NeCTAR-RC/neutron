@@ -1378,7 +1378,8 @@ class OvnSbSynchronizer(OvnDbSynchronizer):
         LOG.debug('OVN-SB Sync hostname and physical networks started')
         host_phynets_map = self.ovn_api.get_chassis_hostname_and_physnets()
         current_hosts = set(host_phynets_map)
-        previous_hosts = segments_db.get_hosts_mapped_with_segments(ctx)
+        previous_hosts = segments_db.get_hosts_mapped_with_segments(
+            ctx, include_agent_types={ovn_const.OVN_CONTROLLER_AGENT})
 
         new_hosts = current_hosts - previous_hosts
         for host in new_hosts:

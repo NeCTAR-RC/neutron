@@ -1169,8 +1169,10 @@ class TestOvnSbSyncML2(test_mech_driver.OVNMechanismDriverTestCase):
 
         with mock.patch.object(ovn_db_sync.segments_db,
                                'get_hosts_mapped_with_segments',
-                               return_value=hosts_in_neutron):
+                               return_value=hosts_in_neutron) as mock_ghmws:
             ovn_sb_synchronizer.sync_hostname_and_physical_networks(mock.ANY)
+            mock_ghmws.assert_called_once_with(
+                mock.ANY, include_agent_types={ovn_const.OVN_CONTROLLER_AGENT})
             self.assertEqual(
                 len(hostname_with_physnets.keys()),
                 ovn_driver.update_segment_host_mapping.call_count)
