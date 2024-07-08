@@ -77,10 +77,6 @@ def upgrade():
                         'in_prts',
         table_name=PF_TABLE_NAME)
 
-    op.drop_column(PF_TABLE_NAME, 'socket')
-
-    op.drop_column(PF_TABLE_NAME, 'external_port')
-
     migration.create_foreign_keys(PF_TABLE_NAME, foreign_keys)
 
 
