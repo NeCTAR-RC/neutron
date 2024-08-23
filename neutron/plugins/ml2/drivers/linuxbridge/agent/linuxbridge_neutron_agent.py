@@ -681,7 +681,8 @@ class LinuxBridgeManager(amb.CommonAgentManagerBase):
     def get_all_devices():
         devices = set()
         for device in bridge_lib.get_bridge_names():
-            if device.startswith(constants.TAP_DEVICE_PREFIX):
+            if (device.startswith(constants.TAP_DEVICE_PREFIX) and
+                    bridge_lib.is_bridged_interface(device)):
                 devices.add(device)
         return devices
 
