@@ -1,5 +1,6 @@
 [Unit]
 Description=OpenStack Neutron Linux bridge cleanup
+After=network-online.target
 
 [Service]
 Type=oneshot
