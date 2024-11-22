@@ -69,7 +69,8 @@ def get_interface_ifindex(interface):
 def get_bridge_names():
     names = []
     for i in os.listdir(BRIDGE_FS):
-        if not os.path.exists(os.path.join(BRIDGE_FS, i, 'upper_midonet')):
+        if not (os.path.exists(os.path.join(BRIDGE_FS, i, 'upper_midonet')) or
+               os.path.exists(os.path.join(BRIDGE_FS, i, 'upper_ovs_system'))):
             names.append(i)
     return names
 
