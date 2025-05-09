@@ -1211,19 +1211,6 @@ class Dnsmasq(DhcpLocalProcess):
         file_utils.replace_file(name, '\n'.join(options))
         return name
 
-    def _get_ovn_metadata_port_ip(self, subnet):
-        """Check if provided subnet contains OVN metadata port"""
-        ports_result = self.device_manager.plugin.get_ports(
-            port_filters={
-                'device_owner': [constants.DEVICE_OWNER_DISTRIBUTED],
-                'device_id': ['ovnmeta-' + self.network.id]
-            },
-        )
-        if ports_result:
-            for fixed_ip in ports_result[0].get('fixed_ips', []):
-                if fixed_ip.subnet_id == subnet.id:
-                    return fixed_ip.ip_address
-
     def _generate_opts_per_subnet(self):
         options = []
         subnets_without_nameservers = set()
@@ -1277,33 +1264,23 @@ class Dnsmasq(DhcpLocalProcess):
                 else:
                     host_routes.append("%s,%s" % (hr.destination, hr.nexthop))
 
-            # Determine metadata port route
-            if subnet.ip_version == constants.IP_VERSION_4:
-                metadata_route_ip = None
-                # NOTE: OVN metadata port IP is used in a case when the DHCP
-                # agent is deployed in the ML2/OVN enviroment where the native
-                # ovn-controller dhcp is disabled. The ovn metadata route
-                # takes precedence over native force_metadata and
-                # enable_isolated_metadata routes settings.
-                ovn_metadata_port_ip = self._get_ovn_metadata_port_ip(subnet)
-                if ovn_metadata_port_ip:
-                    metadata_route_ip = ovn_metadata_port_ip
+            # Add host routes for isolated network segments
 
-                elif (self.conf.force_metadata or
-                      (isolated_subnets[subnet.id] and
-                       self.conf.enable_isolated_metadata)):
-                    subnet_dhcp_ip = subnet_to_interface_ip.get(subnet.id)
-                    if subnet_dhcp_ip:
-                        metadata_route_ip = subnet_dhcp_ip
-
-                elif not isolated_subnets[subnet.id] and gateway:
-                    metadata_route_ip = gateway
-
-                if metadata_route_ip:
+            if ((self.conf.force_metadata or
+                 (isolated_subnets[subnet.id] and
+                  self.conf.enable_isolated_metadata)) and
+                    subnet.ip_version == 4):
+                subnet_dhcp_ip = subnet_to_interface_ip.get(subnet.id)
+                if subnet_dhcp_ip:
                     host_routes.append(
-                        '%s,%s' % (constants.METADATA_CIDR, metadata_route_ip)
+                        '%s,%s' % (constants.METADATA_CIDR, subnet_dhcp_ip)
                     )
+            elif not isolated_subnets[subnet.id] and gateway:
+                host_routes.append(
+                    '%s,%s' % (constants.METADATA_CIDR, gateway)
+                )
 
+            if subnet.ip_version == 4:
                 for s in self._get_all_subnets(self.network):
                     sub_segment_id = getattr(s, 'segment_id', None)
                     if (s.ip_version == 4 and
@@ -1468,21 +1445,13 @@ class Dnsmasq(DhcpLocalProcess):
             return True
         return False
 
-    @staticmethod
-    def _is_ovn_metadata_port(port, network_id):
-        return (port.device_id == 'ovnmeta-' + network_id and
-                port.device_owner == constants.DEVICE_OWNER_DISTRIBUTED)
-
     @classmethod
     def should_enable_metadata(cls, conf, network):
         """Determine whether the metadata proxy is needed for a network
 
-        If the given network contains a ovn metadata port then this method
-        assumes that the ovn metadata service is in use and this metadata
-        service is not required, method returns False. For other cases this
-        method returns True for truly isolated networks (ie: not attached to a
-        router) when enable_isolated_metadata is True, or for all the networks
-        when the force_metadata flags is True.
+        This method returns True for truly isolated networks (ie: not attached
+        to a router) when enable_isolated_metadata is True, or for all the
+        networks when the force_metadata flags is True.
 
         This method also returns True when enable_metadata_network is True,
         and the network passed as a parameter has a subnet in the link-local
@@ -1491,10 +1460,6 @@ class Dnsmasq(DhcpLocalProcess):
         providing access to the metadata service via logical routers built
         with 3rd party backends.
         """
-        for port in network.ports:
-            if cls._is_ovn_metadata_port(port, network.id):
-                return False
-
         all_subnets = cls._get_all_subnets(network)
         dhcp_subnets = [s for s in all_subnets if s.enable_dhcp]
         if not dhcp_subnets:
