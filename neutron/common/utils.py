@@ -17,7 +17,7 @@
 # when needed.
 
 """Utilities and helper functions."""
-
+from collections import abc
 import functools
 import hashlib
 import hmac
@@ -1088,3 +1088,10 @@ def sign_instance_id(conf, instance_id):
     secret = encodeutils.to_utf8(secret)
     instance_id = encodeutils.to_utf8(instance_id)
     return hmac.new(secret, instance_id, hashlib.sha256).hexdigest()
+
+
+def is_iterable_not_string(value):
+    """Return if a value is iterable but not a string type"""
+    return (isinstance(value, abc.Iterable) and
+            not isinstance(value, abc.ByteString) and
+            not isinstance(value, str))
