@@ -1,0 +1,29 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          neutron-ovn-metadata-agent
+# Required-Start:    $network $local_fs $remote_fs $syslog
+# Required-Stop:     $remote_fs
+# Should-Start:      mysql postgresql rabbitmq-server keystone openvswitch-switch
+# Should-Stop:       mysql postgresql rabbitmq-server keystone openvswitch-switch
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Neutron OVN metadata agent
+# Description:       Neutron OVN Metadata services for instances
+#                    provisioned using OVN.
+### END INIT INFO
+
+# Author: James Page <james.page@ubuntu.com>
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DESC="Neutron OVN Metadata Agent"
+PROJECT_NAME=neutron
+NAME=${PROJECT_NAME}-ovn-metadata-agent
+# --config-file=/etc/neutron/neutron.conf will be appended
+# to DAEMON_ARGS later by openstack-pkg-tools
+DAEMON_ARGS="--config-file=/etc/neutron/neutron_ovn_metadata_agent.ini"
+# The metadata-agent runs as root as it needs to:
+# a) interact with openvswitch locally via a root owned unix socket
+# b) manage veth pairs for actual metadataproxy processes
+# the actual proxy between VM and Nova will not run as root
+SYSTEM_USER=root
+SYSTEM_GROUP=root

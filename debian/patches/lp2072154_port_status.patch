@@ -1,0 +1,143 @@
+From 27eee0b9e85ec23c54c4c907e2c80fe2d4609221 Mon Sep 17 00:00:00 2001
+From: Seyeong Kim <seyeong.kim@canonical.com>
+Date: Thu, 4 Jul 2024 06:23:59 +0000
+Subject: [PATCH] Checking pci_slot to avoid changing staus to BUILD forever
+
+Currently when sriov agent is enabled and migrating a non-sriov
+instance, non-sriov port status is frequently set to BUILD
+instead of ACTIVE.
+This is because the 'binding_activate' function in sriov-nic-agent sets it
+BUILD with get_device_details_from_port_id(as it calls _get_new_status).
+
+This patch checks network_ports in binding_activate and
+skip binding port if it is not sriov port
+
+Closes-Bug: #2072154
+Change-Id: I2d7702e17c75c96ca2f29749dccab77cb2f4bcf4
+(cherry picked from commit a311606fcdae488e76c29e0e5e4035f8da621a34)
+---
+ .../mech_sriov/agent/sriov_nic_agent.py       | 42 ++++++++++++++-----
+ .../mech_sriov/agent/test_sriov_nic_agent.py  | 30 +++++++++++++
+ 2 files changed, 62 insertions(+), 10 deletions(-)
+
+diff --git a/neutron/plugins/ml2/drivers/mech_sriov/agent/sriov_nic_agent.py b/neutron/plugins/ml2/drivers/mech_sriov/agent/sriov_nic_agent.py
+index e552aba48a1..d9e82ed1a88 100644
+--- a/neutron/plugins/ml2/drivers/mech_sriov/agent/sriov_nic_agent.py
++++ b/neutron/plugins/ml2/drivers/mech_sriov/agent/sriov_nic_agent.py
+@@ -112,17 +112,39 @@ class SriovNicSwitchRpcCallbacks(sg_rpc.SecurityGroupAgentRpcCallbackMixin):
+     def binding_activate(self, context, **kwargs):
+         if kwargs.get('host') != self.agent.conf.host:
+             return
+-        LOG.debug("binding activate for port %s", kwargs.get('port_id'))
+-        device_details = self.agent.get_device_details_from_port_id(
+-            kwargs.get('port_id'))
+-        mac = device_details.get('mac_address')
+-        binding_profile = device_details.get('profile')
+-        if binding_profile:
+-            pci_slot = binding_profile.get('pci_slot')
+-            self.agent.activated_bindings.add((mac, pci_slot))
++
++        port_id = kwargs.get('port_id')
++
++        def _is_port_id_in_network(network_port, port_id):
++            for network_id, ports in network_port.items():
++                for port in ports:
++                    if port['port_id'] == port_id:
++                        return True
++            return False
++
++        is_port_id_sriov = _is_port_id_in_network(
++            self.agent.network_ports, port_id
++        )
++
++        if is_port_id_sriov:
++            LOG.debug("binding activate for port %s", port_id)
++            device_details = self.agent.get_device_details_from_port_id(
++                port_id)
++            mac = device_details.get('mac_address')
++            binding_profile = device_details.get('profile')
++            if binding_profile:
++                pci_slot = binding_profile.get('pci_slot')
++                self.agent.activated_bindings.add((mac, pci_slot))
++            else:
++                LOG.warning(
++                    "binding_profile not found for port %s.",
++                    port_id
++                )
+         else:
+-            LOG.warning("binding_profile not found for port %s.",
+-                        kwargs.get('port_id'))
++            LOG.warning(
++                "This port is not SRIOV, skip binding for port %s.",
++                port_id
++            )
+ 
+     def binding_deactivate(self, context, **kwargs):
+         if kwargs.get('host') != self.agent.conf.host:
+diff --git a/neutron/tests/unit/plugins/ml2/drivers/mech_sriov/agent/test_sriov_nic_agent.py b/neutron/tests/unit/plugins/ml2/drivers/mech_sriov/agent/test_sriov_nic_agent.py
+index ede87aa439b..b0a4b783396 100644
+--- a/neutron/tests/unit/plugins/ml2/drivers/mech_sriov/agent/test_sriov_nic_agent.py
++++ b/neutron/tests/unit/plugins/ml2/drivers/mech_sriov/agent/test_sriov_nic_agent.py
+@@ -13,6 +13,7 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
++import collections
+ import copy
+ from unittest import mock
+ 
+@@ -460,6 +461,7 @@ class FakeAgent(object):
+         self.activated_bindings = set()
+         self.conf = mock.Mock()
+         self.conf.host = 'host1'
++        self.network_ports = collections.defaultdict(list)
+ 
+ 
+ class TestSriovNicSwitchRpcCallbacks(base.BaseTestCase):
+@@ -528,6 +530,12 @@ class TestSriovNicSwitchRpcCallbacks(base.BaseTestCase):
+         }
+         kwargs = self._create_fake_bindings(fake_port, self.agent.conf.host)
+         kwargs['context'] = self.context
++
++        self.agent.network_ports['network_id'].append({
++            'port_id': fake_port['id'],
++            'device': 'fake_device'
++        })
++
+         self.sriov_rpc_callback.binding_activate(**kwargs)
+         # Assert agent.activated_binding set contains the new binding
+         self.assertIn((fake_port['mac_address'],
+@@ -538,10 +546,32 @@ class TestSriovNicSwitchRpcCallbacks(base.BaseTestCase):
+         fake_port = self._create_fake_port()
+         kwargs = self._create_fake_bindings(fake_port, 'other-host')
+         kwargs['context'] = self.context
++
++        self.agent.network_ports[self.agent.conf.host].append({
++            'port_id': fake_port['id'],
++            'device': 'fake_device'
++        })
++
+         self.sriov_rpc_callback.binding_activate(**kwargs)
+         # Assert no bindings were added
+         self.assertEqual(set(), self.agent.activated_bindings)
+ 
++    def test_binding_activate_port_not_in_network(self):
++        fake_port = self._create_fake_port()
++        kwargs = self._create_fake_bindings(fake_port, self.agent.conf.host)
++        kwargs['context'] = self.context
++
++        self.agent.network_ports['network_id'] = []
++
++        with mock.patch.object(sriov_nic_agent.LOG,
++                               'warning') as mock_warning:
++            self.sriov_rpc_callback.binding_activate(**kwargs)
++            # Check that the warning message was logged
++            expected_msg = (
++                "This port is not SRIOV, skip binding for port %s."
++            )
++            mock_warning.assert_called_once_with(expected_msg, fake_port['id'])
++
+     def test_binding_deactivate(self):
+         # binding_deactivate() basically does nothing
+         # call it with both the agent's host and other host to cover
+
