@@ -917,7 +917,10 @@ class OvsdbSbOvnIdl(sb_impl_idl.OvnSbApiIdlImpl, Backend):
         except idlutils.RowNotFound:
             return None
         cmd = self.db_find_rows('Port_Binding', ('datapath', '=', dp),
-                                ('type', '=', ovn_const.LSP_TYPE_LOCALPORT))
+                                ('type', '=', ovn_const.LSP_TYPE_LOCALPORT),
+                                ('external_ids', '=', {
+                                    ovn_const.OVN_DEVICE_OWNER_EXT_ID_KEY:
+                                        'network:distributed'}))
         return next(iter(cmd.execute(check_error=True)), None)
 
     def set_chassis_neutron_description(self, chassis, description,
