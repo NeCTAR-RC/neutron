@@ -13,7 +13,6 @@
 #    under the License.
 #
 
-from alembic import op
 import sqlalchemy as sa
 
 
@@ -31,7 +30,7 @@ down_revision = 'fc153938cdc1'
 
 
 def upgrade():
-    op.drop_column('subnets', 'in_use')
+    pass
 
 
 def expand_drop_exceptions():
