@@ -1,0 +1,10 @@
+Description: Install missing db files, including
+  neutron/db/migration/alembic.ini. Also install
+  missing test config files.
+Author: Corey Bryant <corey.bryant@canonical.com>
+
+--- /dev/null
++++ b/MANIFEST.in
+@@ -0,0 +1,2 @@
++recursive-include neutron/db/ *
++recursive-include neutron/tests/etc/ *

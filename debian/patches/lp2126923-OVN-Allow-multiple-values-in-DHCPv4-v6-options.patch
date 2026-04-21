@@ -1,0 +1,107 @@
+From: Rodolfo Alonso Hernandez <ralonsoh@redhat.com>
+Date: Tue, 14 Oct 2025 11:10:40 +0000
+Subject: [OVN] Allow multiple values in DHCPv4/v6 options
+
+The configuration parameters ``ovn_dhcp4_global_options`` and
+``ovn_dhcp6_global_options`` allow multiple values per key, separated by
+a semi-colon character. E.g.:
+  ntp_server:1.2.3.4,wpad:1.2.3.5;1.2.3.6
+
+Conflicts:
+  neutron/tests/functional/plugins/ml2/drivers/ovn/mech_driver/ovsdb/test_ovn_client.py
+
+Closes-Bug: #2126923
+Signed-off-by: Rodolfo Alonso Hernandez <ralonsoh@redhat.com>
+Change-Id: I09fef07438a569c5db6f4e28803a7aaf2a57089f
+(cherry picked from commit 8461f0579bf5b3a1cf997e11796abb668da901d6)
+
+Origin: backport, https://opendev.org/openstack/neutron/commit/1e27a85f4f1e32f4a40cedd46335131154b89b6c
+Bug-Ubuntu: https://bugs.launchpad.net/bugs/2126923
+---
+ neutron/conf/plugins/ml2/drivers/ovn/ovn_conf.py            | 10 ++++++----
+ .../plugins/ml2/drivers/ovn/mech_driver/ovsdb/ovn_client.py |  7 ++++++-
+ .../ml2/drivers/ovn/mech_driver/ovsdb/test_ovn_client.py    | 13 +++++++++++++
+ .../dhcp-options-multiple-values-a54671066a579e6a.yaml      |  6 ++++++
+ 4 files changed, 31 insertions(+), 5 deletions(-)
+ create mode 100644 releasenotes/notes/dhcp-options-multiple-values-a54671066a579e6a.yaml
+
+diff --git a/neutron/conf/plugins/ml2/drivers/ovn/ovn_conf.py b/neutron/conf/plugins/ml2/drivers/ovn/ovn_conf.py
+index 72b9779..c99dc0f 100644
+--- a/neutron/conf/plugins/ml2/drivers/ovn/ovn_conf.py
++++ b/neutron/conf/plugins/ml2/drivers/ovn/ovn_conf.py
+@@ -159,10 +159,11 @@ ovn_opts = [
+                        "automatically set on each subnet upon creation and "
+                        "on all existing subnets when Neutron starts.\n"
+                        "An empty value for a DHCP option will cause that "
+-                       "option to be unset globally.\n"
++                       "option to be unset globally. Multiple values should "
++                       "be separated by semi-colon.\n"
+                        "EXAMPLES:\n"
+-                       "- ntp_server:1.2.3.4,wpad:1.2.3.5 - Set ntp_server "
+-                       "and wpad\n"
++                       "- ntp_server:1.2.3.4,wpad:1.2.3.5;1.2.3.6 - Set "
++                       "ntp_server and wpad\n"
+                        "- ntp_server:,wpad:1.2.3.5 - Unset ntp_server and "
+                        "set wpad\n"
+                        "See the ovn-nb(5) man page for available options.")),
+@@ -172,7 +173,8 @@ ovn_opts = [
+                        "automatically set on each subnet upon creation and "
+                        "on all existing subnets when Neutron starts.\n"
+                        "An empty value for a DHCPv6 option will cause that "
+-                       "option to be unset globally.\n"
++                       "option to be unset globally. Multiple values should "
++                       "be separated by semi-colon.\n"
+                        "See the ovn-nb(5) man page for available options.")),
+     cfg.BoolOpt('ovn_emit_need_to_frag',
+                 default=False,
+diff --git a/neutron/plugins/ml2/drivers/ovn/mech_driver/ovsdb/ovn_client.py b/neutron/plugins/ml2/drivers/ovn/mech_driver/ovsdb/ovn_client.py
+index f6f4374..aa85bbf 100644
+--- a/neutron/plugins/ml2/drivers/ovn/mech_driver/ovsdb/ovn_client.py
++++ b/neutron/plugins/ml2/drivers/ovn/mech_driver/ovsdb/ovn_client.py
+@@ -2263,7 +2263,12 @@ class OVNClient(object):
+             # If the value is null (i.e. config ntp_server:), treat it as
+             # a request to remove the option
+             if value:
+-                options[option] = value
++                # Example: ntp_server='{1.2.3.4, 1.2.3.5}'. A single value is
++                # also allowed but in shake of readability, it is printed as a
++                # single string.
++                _value = value.split(';')
++                options[option] = (_value[0] if len(_value) == 1 else
++                                   '{%s}' % ', '.join(_value))
+             else:
+                 try:
+                     del options[option]
+diff --git a/neutron/tests/functional/plugins/ml2/drivers/ovn/mech_driver/ovsdb/test_ovn_client.py b/neutron/tests/functional/plugins/ml2/drivers/ovn/mech_driver/ovsdb/test_ovn_client.py
+index f63de4f..f03824f 100644
+--- a/neutron/tests/functional/plugins/ml2/drivers/ovn/mech_driver/ovsdb/test_ovn_client.py
++++ b/neutron/tests/functional/plugins/ml2/drivers/ovn/mech_driver/ovsdb/test_ovn_client.py
+@@ -84,3 +84,16 @@ class TestOVNClient(base.TestOVNFunctionalBase):
+                     # command automatically checks for existing logical
+                     # switch ports
+                     ovn_client.create_port(self.context, port_data)
++
++    def test_create_subnet_with_dhcp_options(self):
++        cfg.CONF.set_override('ovn_dhcp4_global_options',
++                              'ntp_server:1.2.3.4;1.2.3.5,wpad:1.2.3.6',
++                              group='ovn')
++        with self.network('test-ovn-client') as net:
++            with self.subnet(net):
++                dhcp_options = self.nb_api.dhcp_options_list().execute(
++                    check_error=True)[0]
++                self.assertEqual('{1.2.3.4, 1.2.3.5}',
++                                 dhcp_options.options['ntp_server'])
++                self.assertEqual('1.2.3.6',
++                                 dhcp_options.options['wpad'])
+diff --git a/releasenotes/notes/dhcp-options-multiple-values-a54671066a579e6a.yaml b/releasenotes/notes/dhcp-options-multiple-values-a54671066a579e6a.yaml
+new file mode 100644
+index 0000000..ac45b37
+--- /dev/null
++++ b/releasenotes/notes/dhcp-options-multiple-values-a54671066a579e6a.yaml
+@@ -0,0 +1,6 @@
++---
++fixes:
++  - |
++    The configuration parameters ``ovn_dhcp4_global_options`` and
++    ``ovn_dhcp6_global_options`` allow multiple values per key, separated by
++    a semi-colon character. E.g.: ntp_server:1.2.3.4,wpad:1.2.3.5;1.2.3.6
