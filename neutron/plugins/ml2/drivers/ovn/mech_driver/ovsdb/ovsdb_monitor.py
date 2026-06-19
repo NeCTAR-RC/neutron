@@ -245,13 +245,21 @@ class ChassisEvent(row_event.RowEvent):
 
 
 class PortBindingChassisUpdateEvent(row_event.RowEvent):
-    """Event for matching a port moving chassis
+    """Event for matching a port (re)binding to a chassis
 
     If the LSP is up and the Port_Binding chassis has just changed,
     there is a good chance the host died without cleaning up the chassis
     column on the Port_Binding. The port never goes down, so we won't
     see update the driver with the LogicalSwitchPortUpdateUpEvent which
     only monitors for transitions from DOWN to UP.
+
+    The same applies during a nova instance rebuild: nova unplugs and then
+    quickly replugs the VIF on the same chassis before OVN registers the
+    port going down. The Logical_Switch_Port never transitions DOWN to UP,
+    so LogicalSwitchPortUpdateUpEvent is not fired and nova times out
+    waiting for the network-vif-plugged event. By matching on the
+    Port_Binding chassis being (re)set while the LSP stays up, we emit the
+    required port status update (and therefore the vif-plugged event).
     """
 
     def __init__(self, driver):
@@ -266,7 +274,20 @@ class PortBindingChassisUpdateEvent(row_event.RowEvent):
         # NOTE(twilson) ROW_UPDATE events always pass old, but chassis will
         # only be set if chassis has changed
         old_chassis = getattr(old, 'chassis', None)
-        if not (row.chassis and old_chassis) or row.chassis == old_chassis:
+        # ``old`` only carries the chassis column when it changed, so a
+        # missing attribute means no change. When it did change, treat it as a
+        # (re)bind whenever the port now has a chassis that differs from the
+        # previous value, unless the port is being unbound (new chassis empty).
+        # This matches any transition into a chassis from unbound ([] -> X),
+        # which includes a re-bind to the same chassis (chassis cleared and set
+        # again) as happens during a nova instance rebuild. It is intentionally
+        # broad: the emit is gated below on the LSP being up and enabled, and
+        # set_port_status_up is idempotent, so a redundant match (e.g. a first
+        # bind whose LSP is already up) is harmless.
+        no_chassis_change = (not hasattr(old, 'chassis') or
+                             not row.chassis or
+                             row.chassis == old_chassis)
+        if no_chassis_change:
             return False
         if row.type == ovn_const.OVN_CHASSIS_REDIRECT:
             return False
